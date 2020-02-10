@@ -19,7 +19,7 @@ def container_add():
 
 def container_delete(plugin):
     containers = getAll_containers_list()
-    # print(containers_list)
+    print(containers_list)
 
 def container_pause():
     pass
