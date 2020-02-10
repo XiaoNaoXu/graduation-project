@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>主页</title>
+</head>
+<body>
+    <table width='200px' height='200px' border=1 cellspacing='0'>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <script>
+        const es = document.getElementsByTagName('tr');
+        for (const key in es) {
+            es[key].onclick = function() {
+                let number = parseInt(key) + 1;
+                alert('你点击的是第' + number + '行表格');
+            }
+        }      
+    </script>
+</body>

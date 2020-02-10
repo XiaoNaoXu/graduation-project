@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>主页</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../static/imags/favicon32.ico"/>
+    <link rel="stylesheet" href="../static/css/body.css">
+    <link rel="stylesheet" href="../static/css/header.css" >
+    <script type="text/javascript" src="../static/js/position.js"></script>
+</head>
+
+<body>
+
+        <header class="header">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="left-header-div">
+                        <a href="{{ url_for('index') }}" class="left-header-brand">
+                            <strong class="text-primary">
+                                ICU
+                            </strong>
+                            预警框架
+                        </a>
+                    </div>
+                    <div class="right-header-div">
+                        基于WEB的ICU接口设计与实现
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+<div class="med">
+    <nav id="sidebar">
+            <div class="login-detail d-flex">
+                <div class="avatar">
+                    <img src="../static/imags/p2.jpg" alt="..." class="img-fluid">
+                </div>
+                <div style="width: 120px;">
+                        登录信息
+                </div>
+            </div>
+        <span class="heading">Meau</span>
+        <li >
+            <a href="{{ url_for('index') }}">
+                主页
+            </a>
+            
+        </li>
+        <li class="active">
+                <a href="{{ url_for('result') }}">
+                    结果
+                </a>
+        </li>
+        <li>
+                <a href="{{ url_for('addplug') }}">
+                    增加接口
+                </a>
+        </li>
+        <li>
+                <a href="{{ url_for('manage') }}">
+                    管理接口
+                </a>
+        </li>
+        <li>
+                <a href="{{ url_for('login') }}">
+                    登录
+                </a>
+        </li>
+        <li >
+                <a href="{{ url_for('help') }}">
+                    帮助
+                </a>
+        </li>
+    </nav>
+
+    <div class="right">
+        <div class="page-header"> 
+                结果
+        </div>
+        <section>
+            <form action="" method="POST">
+                <div style="padding-left: 0.9rem;">
+                        <div id='test1' style="height: 5rem; background: #34373d; width: 70rem;">
+                                <div>
+                                    <div style="display: flex; padding-bottom: 0.5rem;">
+                                        <div>
+                                            文件码：
+                                            <input style="width: 10rem;" type='text' name='id' id='id' value={{findfilecode}}>
+                                            {{filedownload.find}}
+                                        </div>
+                                        <div style="color: rgb(220, 110, 20);">{{tap}}</div>
+                                    </div>
+                                    <div>
+                                        文件列表：
+                                        <select name="filecode" style="width: 10rem;" onchange="javascript:this.form.submit();"> 
+                                                {%  for filecode in filecodes %}
+                                                {% if sefilecode == filecode %}
+                                                    <option value={{filecode}} selected>{{filecode}}</option>
+                                                {% else %}
+                                                    <option value={{filecode}}>{{filecode}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        {{filedownload.downloadf}}
+                                        {{filedownload.alldownloadf}}
+                                    </div>
+                            </div>
+                </div>
+            </form>
+        </section>
+        
+        <section>
+                <div class="tblock">
+                        <div class=".text">
+                                <div class="textarea-t">
+                                        {% if ftype == 'text' or ftype == None %}
+                                        <textarea placeholder="" class="textarea-st" name='textarea' >{{text12}}</textarea><br>
+                                        {% elif ftype == 'images' %}
+                                        <img src={{href}} alt="" style='width: auto; height: auto;  max-width: 100%;  max-height: 100%; '>
+                                        {% endif %}
+                                </div>
+                        </div>
+                    </div>
+        </section>
+    </form> 
+            
+    </div>
+
+</div>
+
+
+
+
+</body>
+</html>

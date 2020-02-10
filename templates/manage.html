@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>主页</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../static/imags/favicon32.ico"/>
+    <link rel="stylesheet" href="../static/css/body.css">
+    <link rel="stylesheet" href="../static/css/header.css" >
+    <link rel="stylesheet" href="../static/css/table.css">
+    <script type="text/javascript" src="../static/js/position.js"></script>
+    <script type="text/javascript" src='../static/js/temp.js'></script>
+    <script>
+        function get_id(elemid){
+            var t=document.getElementById("txt");
+            t.value = elemid.id;
+        }
+        function c1(){
+            var t=document.getElementById("txt");
+            const es = document.getElementsByTagName('tr');
+            var tableId = document.getElementById("table"); 
+            for (const key in es) {
+                es[key].onclick = function() {
+                    let number = parseInt(key);
+                    t.value = tableId.rows[number].cells[0].innerHTML
+                }
+            }    
+        }
+    </script>
+</head>
+
+<body>
+<header class="header">
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="left-header-div">
+                <a href="{{ url_for('index') }}" class="left-header-brand">
+                    <strong class="text-primary">
+                        ICU
+                    </strong>
+                    预警框架
+                </a>
+            </div>
+            <div class="right-header-div">
+                基于WEB的ICU接口设计与实现
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="med">
+    <nav id="sidebar">
+            <div class="login-detail d-flex">
+                <div class="avatar">
+                    <img src="../static/imags/p2.jpg" alt="..." class="img-fluid">
+                </div>
+                <div style="width: 120px;">
+                        登录信息
+                </div>
+            </div>
+        <span class="heading">Meau</span>
+        <li >
+            <a href="{{ url_for('index') }}">
+                主页
+            </a>
+            
+        </li>
+        <li >
+                <a href="{{ url_for('result') }}">
+                    结果
+                </a>
+        </li>
+        <li>
+                <a href="{{ url_for('addplug') }}">
+                    增加接口
+                </a>
+        </li>
+        <li class="active">
+                <a href="{{ url_for('manage') }}">
+                    管理接口
+                </a>
+        </li>
+        <li >
+                <a href="{{ url_for('login') }}">
+                    登录
+                </a>
+        </li>
+        <li >
+                <a href="{{ url_for('help') }}">
+                    帮助
+                </a>
+        </li>
+    </nav>
+
+    <div class="right">
+        <div class="page-header"> 
+                接口管理
+        </div>
+        <section>
+            <div style="padding-left: 0.5rem;">
+                <form action="" method="POST">
+                    <div id='test1' style="height: 3rem; background: #34373d; background-image:linear-gradient(141deg,#160c07 0%,#1fc8db 51%,#494745 75%)">
+                        {{ manageform.plugin }}   {{ manageform.image }}    {{ manageform.container }}    {{ manageform.sources }}
+                        {{ manageform.image_add }}    {{ manageform.other_add }}
+                    </div>
+                    <input type="hidden" name = 'manage_select' id="manage_select" value={{ manage_select }}>
+                    <input type="hidden" name = 'txt' id="txt" value='' size="30"/>
+                    {% if manage_select == 'image' %}
+                        <table id="table">
+                            <tr class="index-image">
+                                <td class="index-image-name">镜像</td>
+                                <td class="index-image-name">父镜像</td>
+                                <td class="index-image-id">镜像ID</td>
+                                <td class="index-image-labels">作者</td>
+                                <td class="index-image-os">操作系统</td>
+                                <td class="index-image-architecture">处理器架构</td>
+                                <td class="index-image-size">大小</td>
+                                <td class="index-image-created">创建时间(格林尼治标准时间)</td>
+                                <td class="index-image-delete">删除</td>
+                            </tr>
+                            {% for image in images %}
+                                <tr class="object-image">
+                                    <td class="object-image-name">{{ image }}</td>
+                                    <td class="object-image-name">{{ images[image]['parentName'] }}</td>
+                                    <td class="object-image-id">{{ images[image]['Id'] }}</td>
+                                    <td class="object-image-labels">{{ images[image]['Labels'] }}</td>
+                                    <td class="object-image-os">{{ images[image]['Os'] }}</td>
+                                    <td class="object-image-architecture">{{ images[image]['Architecture'] }}</td>
+                                    <td class="object-image-size">{{ images[image]['Size'] }}(Byte)</td>
+                                    <td class="object-image-created">{{ images[image]['Created'] }}</td>
+                                    <td class="object-image-delete">{{ manageform.delete(onclick="c1();") }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% elif manage_select == 'container' %}
+                        <table id="table">
+                            <tr class="index-container">
+                                <td class="index-container-name">容器</td>
+                                <td class="index-container-id">容器ID</td>
+                                <td class="index-container-status">状态</td>
+                                <td class="index-container-pname">基础镜像</td>
+                                <td class="index-container-pid">基础镜像ID</td>
+                                <td class="index-container-created">创建时间(格林尼治标准时间)</td>
+                                <td class="index-container-laststart">上次启动时间(格林尼治标准时间)</td>
+                                <td class="index-container-delete">删除</td>
+                            </tr>
+                            {% for container in containers %}
+                                <tr class="object-container">
+                                    <td class="object-container-name">{{ container }}</td>
+                                    <td class="object-container-id">{{ containers[container]['id'] }}</td>
+                                    <td class="object-container-status">{{ containers[container]['status'] }}</td>
+                                    <td class="object-container-pname">{{ containers[container]['pname'] }}</td>
+                                    <td class="object-container-pid">{{ containers[container]['pid'] }}</td>
+                                    <td class="object-container-created">{{ containers[container]['created'] }}</td>
+                                    <td class="object-container-laststart">{{ containers[container]['laststart'] }}</td>
+                                    <td class="object-container-delete">{{ manageform.delete(onclick="c1();") }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% elif manage_select == 'sources' %}
+                        <div id="ter" style=" width: 90rem; ">
+                            {% for source_name in sources_dict %}
+                                <div style="width: 40rem; height: 30rem; padding-top: 2rem; display: flex; float: left;">
+                                    <div style="width: 90%; height: 90%; background-color: #34373d; ">
+                                        <div style="width: 100%; height: 25%; ">
+                                            <div style="padding:1rem; width: 100%; height: 100%; display: flex; ">
+                                                <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
+                                                    软件源名称：<input type="text" name="sources-name" value={{source_name}}>
+                                                </div>
+                                                <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
+                                                    {% if sources_dict[source_name][1] == 1 %}
+                                                        {{ manageform.cancel(onclick="get_id(this)", id=source_name ) }}
+                                                        {{ manageform.commit(onclick="get_id(this)", id=source_name ) }}
+                                                    {% else %}
+                                                        {{ manageform.edit(onclick="get_id(this)", id=source_name ) }}
+                                                    {% endif %}
+                                                    {{ manageform.delete(onclick="get_id(this)", id=source_name ) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="width: 100%; height: 75%;">
+                                            <div style="padding:1rem; width: 100%; height: 100%;">
+                                                <textarea style="width: 100%; height: 100%;" name="sources-content">{{sources_dict[source_name][0]}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% elif manage_select == 'image_add' %}
+                        <div style="width: 90rem; height: 40rem; padding-top: 2rem; display: flex;">
+                            <div style="width: 60%; height: 80%; background-color: #34373d; ">
+                                <div style="width: 100%; height: 25%; ">
+                                    <div style="padding:1rem; width: 100%; height: 100%; display: flex; ">
+                                        <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
+                                            <div>基础镜像：<input type="text" name="basic-image" placeholder="例如：ubunut:19.10" value={{other_data['basic_image']}}></div>
+                                            <div>新镜像名称：<input type="text" name="image-tag" placeholder="没有例如，英文加数字就行" value={{other_data['image_tag']}}>:basic</div>
+                                        </div>
+                                        <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
+                                            <select class="source-select"  name="source-select" > 
+                                                {%  for source in sources %}
+                                                    {% if source == other_data['source_select'] %}
+                                                        <option value={{source}} selected>{{source}}</option>
+                                                    {% else %}
+                                                        <option value={{source}}>{{source}}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            {{ manageform.commit }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; height: 75%;">
+                                    <div style="padding:1rem; width: 100%; height: 100%;">
+                                        <textarea style="width: 100%; height: 100%;" name="install-content" id="install-content">{{other_data['install_content']}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 40%; height: 80%; background-color: #34373d; ">
+                                <div style="width: 100%; height: 100%; padding: 1rem; ">
+                                    <div style="width: 100%; height: 100%; background-color: #494d53;">
+                                        <div style="padding: 1rem;">
+                                            <li style="color: rgb(173, 70, 29);">运行日志: </li>
+                                            {% for meg in get_flashed_messages()[0] %}
+                                                <li>{{meg}}</li>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% elif manage_select == 'other_add' %}
+                        <div style="width: 90rem; height: 40rem; padding-top: 2rem; display: flex;">
+                            <div style="width: 60%; height: 80%; background-color: #34373d; ">
+                                <div style="width: 100%; height: 25%; ">
+                                    <div style="padding:1rem; width: 100%; height: 100%; display: flex; ">
+                                        <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
+                                            软件源名称：<input type="text" name="sources-name" placeholder="例如：ubunut-aliyun">
+                                        </div>
+                                        <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
+                                            {{ manageform.commit(onclick="c1();") }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; height: 75%;">
+                                    <div style="padding:1rem; width: 100%; height: 100%;">
+                                        <textarea style="width: 100%; height: 100%;" name="sources-content" id="sources" cols="30" rows="10"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    {% else %}
+                        <table id="table">
+                            <tr class="index">
+                                <td class="index-name">名称</td>
+                                <td class="index-image">基础镜像</td>
+                                <td class="index-filename">输入文件名</td>
+                                <td class="index-sources">软件源</td>
+                                <td class="index-detail">接口描述</td>
+                                <td class="index-edit">编辑</td>
+                                <td class="index-delete">删除</td>
+                            </tr>
+                            {% for mou in mous %}
+                                {% if mous[mou]['edit_flag'][0] == mous[mou]['edit_flag'][1] %}
+                                    <tr class="object" >
+                                        <td class="object-name">{{ mou }}</td>
+                                        <td class="object-image">{{ mous[mou]['image'] }}</td>
+                                        <td class="object-filename">{{ mous[mou]['inputfilename'][0] }}</td>
+                                        <td class="object-sources">{{ mous[mou]['sources'][0] }}</td>
+                                        <td class="object-detail">
+                                            <textarea readonly name={{mou + '_detail' }}  class="text-detail" id="detail" >{{ ''.join(mous[mou]['detail']) }}</textarea>
+                                        </td>
+                                        <td class="object-edit">{{ manageform.edit(onclick="c1();") }}</td>
+                                        <td class="object-delete">{{ manageform.delete(onclick="c1();") }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="object">
+                                        <td class="object-name">{{ mou }}</td>
+                                        <td class="object-image">{{ mous[mou]['image'] }}</td>
+                                        <td class="object-filename">
+                                            <input class="input-inputfilename" type="text" value={{mous[mou]['inputfilename'][0]}}>
+                                        </td>
+                                        <td class="object-sources">
+                                            <!-- onchange="javascript:this.form.submit();" -->
+                                            <select class="source-select"  name="source" > 
+                                                {%  for source in sources %}
+                                                    {% if source == mous[mou]['sources'][0] %}
+                                                        <option value={{source}} selected>{{source}}</option>
+                                                    {% else %}
+                                                        <option value={{source}}>{{source}}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <textarea name={{mou + '_detail' }} class="text-detail-selected"  name="detail" id="detail">{{ ''.join(mous[mou]['detail']) }}</textarea>
+                                        </td>
+                                        <td class="object-edit">{{ manageform.cancel(onclick="c1();") }} {{ manageform.commit(onclick="c1();") }}</td>
+                                        <td class="object-delete">{{ manageform.delete(onclick="c1();") }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>

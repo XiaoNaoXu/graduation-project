@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>增加接口</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../static/imags/favicon32.ico"/>
+    <link rel="stylesheet" href="static/css/body.css">
+    <link rel="stylesheet" href="static/css/header.css" >
+    <script type="text/javascript" src="../static/js/position.js"></script>
+</head>
+
+<body>
+
+        <header class="header">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="left-header-div">
+                        <a href="{{ url_for('index') }}" class="left-header-brand">
+                            <strong class="text-primary">
+                                ICU
+                            </strong>
+                            预警框架
+                        </a>
+                    </div>
+                    <div class="right-header-div">
+                        基于WEB的ICU接口设计与实现
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+<div class="med">
+    <nav id="sidebar">
+            <div class="login-detail d-flex">
+                <div class="avatar">
+                    <img src="../static/imags/p2.jpg" alt="..." class="img-fluid">
+                </div>
+                <div style="width: 120px;">
+                        登录信息
+                </div>
+            </div>
+            <span class="heading">Meau</span>
+            <li >
+                <a href="{{ url_for('index') }}">
+                    主页
+                </a>
+                
+            </li>
+            <li >
+                    <a href="{{ url_for('result') }}">
+                        结果
+                    </a>
+            </li>
+            <li class="active">
+                    <a href="{{ url_for('addplug') }}">
+                        增加接口
+                    </a>
+            </li>
+            <li>
+                    <a href="{{ url_for('manage') }}">
+                        管理接口
+                    </a>
+            </li>
+            <li>
+                    <a href="{{ url_for('login') }}">
+                        登录
+                    </a>
+            </li>
+            <li >
+                    <a href="{{ url_for('help') }}">
+                        帮助
+                    </a>
+            </li>
+    </nav>
+
+    <div class="right">
+        <div class="page-header"> 
+                增加接口
+        </div>
+        <form action="" method="POST" enctype="multipart/form-data">
+        <div style="width: 70rem;padding-left: 3rem;">
+            <div style="background: #2D2F35;">
+                <div class="row1">
+                    <div class="col1">
+                            <div id="language1" >
+                                    {{myform.language.label}} 
+                                    {{myform.language}} 
+                                </div>
+                    </div>
+                    <div class="col1">
+                            <div id="language" >
+                                    {{myform.pluginname.label}} 
+                                    {{myform.pluginname}}
+                                    
+                                </div>
+                                <div style="color: rgb(211, 80, 48);">
+                                    {{get_flashed_messages()[0]}}
+                                </div>
+                    </div>
+                </div>
+                <div class="row2">
+                    <div class="col1">
+                        {{myform.inputfilename.label}}
+                        {{myform.inputfilename}}
+                    </div>
+                    <div class="col1">
+                        {{myform.inputtype.label}}
+                        {{myform.inputtype}}
+                    </div>
+                </div>
+                <!-- <div class="row3">
+                    <div class="col1">
+                        {{myform.outputfilename.label}}
+                        {{myform.outputfilename}}
+                    </div>
+                    <div class="col1">
+                        {{myform.outputtype.label}}
+                        {{myform.outputtype}}
+                    </div>
+                </div> -->
+                <div class="row4">
+                    <div class="col2">
+                        {{myform.sources.label}}
+                        {{myform.sources}}
+                    </div>
+                    <div class="col1">
+                        {{myform.textarea.label}}
+                        {{myform.textarea}}
+                    </div>
+                </div>
+                <div class="row5"> 
+                    <div class="col1">
+                        {{myform.pluginfile.label}}
+                        {{myform.pluginfile(multiple='multiple')}}
+                    </div>
+                </div>
+                <div class="row6"> 
+                    <div>
+                            {{myform.detail.label}}
+                            {{myform.detail}}
+                    </div>
+                    <div class="col1">
+                        {{myform.save}}<br>
+                        {{myform.pulish}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+        
+            
+    </div>
+
+</div>
+
+
+
+
+</body>
+</html>
