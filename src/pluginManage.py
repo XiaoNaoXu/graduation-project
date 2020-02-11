@@ -10,13 +10,13 @@ def localfile_delete(filename, path):
             localfile_delete(files, path + filename + '/')
         try:
             os.rmdir(path + filename)
-        except:
-            pass
+        except Exception as err:
+            print('localfile_delete: ', err)
     else:
         try:
             os.remove(path + filename)
-        except:
-            pass
+        except Exception as err:
+            print('localfile_delete: ', err)
 
 
 def plugin_delete(plugin, moulists):

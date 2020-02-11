@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, g, flash, send_from_directory
-import os, random, string
+from flask import Flask, render_template, request, redirect, url_for, g, flash, send_from_directory, jsonify
+import os, random, string, json
 from werkzeug.utils import secure_filename
 from src.mou import Platform
 from src.myForm import myForm,addForm,fileDownload, manageForm
@@ -8,9 +8,11 @@ from src.mydocker import my_docker, get_images_list
 from src.pluginManage import plugin_add, plugin_delete, plugin_update
 from src.imageManage import image_add, image_delete, image_list
 from src.containerManage import containers_list, container_delete
+from src.sourcesManage import sources_delete, sources_list, sources_modification
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'qqq123456'
+app.config['JSON_AS_ASCII'] = False
 app.debug = 'True'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -225,6 +227,8 @@ def addplug():
         #计算语言数量
         num[0] = len(moulists)
         myform = addForm()   #添加接口页面表单构造
+        myform.sources.choices = sources_choices()
+        myform.language.choices = language_choices()
         lines = list()               #存放接口列表名称的空列表   
 
         #请求方式为GET
@@ -559,34 +563,37 @@ def manage():
                                 if manageform.delete.data:
                                         image_delete(sename)
                                         images.pop(sename)
+                                elif manageform.container_add.data:
+                                        con_docker_object = my_docker(sename, config = main_condist, filecode='--no-filecode', images=True, containers=False )
+                                        container_name = sename.split(':')[0] + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))
+                                        con_docker_object.container_ceate(container_name)
                         elif manage_select == 'container':
                                 containers = containers_list(main_condist)
-                        elif manage_select == 'sources':
-                                for source in sources:
-                                        if os.path.isfile(main_condist['sources_path'][0] + source + '/sources.list'):
-                                                with open(main_condist['sources_path'][0] + source + '/sources.list', 'r+') as f:
-                                                        sources_dict[source] = list()
-                                                        sources_dict[source].append(f.read())
-                                                        sources_dict[source].append(0)
                                 if manageform.delete.data:
-                                        # sources_dict[sename][1] = 0
-                                        pass
+                                        container_delete(sename)
+                                        containers.pop(sename)
+                        elif manage_select == 'sources':
+                                sources_dict = sources_list(sources, main_condist)
+                                if manageform.delete.data:
+                                        sources_delete(sename, main_condist)
+                                        sources_dict.pop(sename)
                                 elif manageform.edit.data:
                                         sources_dict[sename][1] = 1
                                 elif manageform.commit.data:
-                                        # sources_dict[sename][1] = 0
-                                        pass
+                                        sources_content = request.form.get('sources-content')
+                                        if sources_modification(sename, sources_content, main_condist) == True:
+                                                print(sources_content)
+                                                sources_dict[sename][0] = sources_content
                                 elif manageform.cancel.data:
-                                        # sources_dict[sename][1] = 0
                                         pass
-                                print(sename)
+                                return jsonify(sources_dict)
                         elif manage_select == 'image_add':
                                 if manageform.commit.data:
                                         other_data['basic_image'] = request.form.get('basic-image')
                                         other_data['install_content'] = request.form.get('install-content')
                                         other_data['source_select'] = request.form.get('source-select')
                                         other_data['image_tag'] = request.form.get('image-tag')
-                                        docker_object = my_docker(config = main_condist, images=False, containers=False )
+                                        docker_object = my_docker('--no-plugin', config = main_condist, filecode='--no-filecode', images=False, containers=False )
                                         docker_object.basic_image_build(other_data['basic_image'], 
                                                                                                                 other_data['image_tag'],
                                                                                                                 other_data['source_select'],

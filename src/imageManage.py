@@ -2,16 +2,13 @@ import os
 from src.mydocker import get_images_list, getAll_images_list, my_docker
 
 def pimageid_to_pimagename(images, parent_imageId):
-    if parent_imageId != None:
-        for image in images:
-            if parent_imageId == image.id:
-                if image.attrs['Parent'] != '':
-                    return pimageid_to_pimagename(images, image.attrs['Parent'])
-                elif image.attrs['Parent'] == '':
-                    if image.attrs['RepoTags'] != []:
-                        return image.attrs['RepoTags'][0]
-                    else:
-                        return []
+    for image in images:
+        if parent_imageId == image.id:
+            if image.attrs['Parent'] == '' or image.attrs['RepoTags'] != []:
+                return image.attrs['RepoTags'][0]
+            elif image.attrs['Parent'] != '':
+                return pimageid_to_pimagename(images, image.attrs['Parent'])
+                
 
 def image_list():
     images_list = dict()
@@ -21,16 +18,19 @@ def image_list():
         name = image.attrs['RepoTags'][0]
         images_list[name] = dict()
         images_list[name]['Id'] = image.attrs['Id'][7:19]
-        images_list[name]['parentName'] = pimageid_to_pimagename(getAll_images_list(), image.attrs['Parent'])
+        if image.attrs['Parent'] != '':
+            images_list[name]['parentName'] = pimageid_to_pimagename(getAll_images_list(), image.attrs['Parent'])
+        else:
+            images_list[name]['parentName'] = None
         try:
             images_list[name]['Labels'] = image.attrs['ContainerConfig']['Labels']['maintainer']
         except:
             images_list[name]['Labels'] = None
         images_list[name]['User'] = image.attrs['Config']['User']
         if name[len(name) - 6:len(name)] == 'plugin':
-            images_list[name]['Os'] = '衍生镜像'
+            images_list[name]['imagetype'] = '衍生镜像'
         else:
-            images_list[name]['Os'] = '基础镜像'
+            images_list[name]['imagetype'] = '基础镜像'
         images_list[name]['Size'] = image.attrs['Size']
         images_list[name]['Created'] = image.attrs['Created']
         images_list[name]['Architecture'] = image.attrs['Os'] + '-' + image.attrs['Architecture']

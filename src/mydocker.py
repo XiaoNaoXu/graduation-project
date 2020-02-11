@@ -11,6 +11,8 @@ def getAll_images_list(client = docker.from_env()):
         return []
     else:
         return images
+    finally:
+        client.close()
 
 def clear_none_image(client = docker.from_env()):
     try:
@@ -33,6 +35,8 @@ def clear_none_image(client = docker.from_env()):
                             if container.short_id == err[len(err) - 14: len(err) - 4]:
                                 container.remove(v = True, force = True)
                                 break
+    finally:
+        client.close()
 
 #获取所有镜像，不包括中间层
 def get_images_list(client = docker.from_env()):
@@ -46,6 +50,7 @@ def get_images_list(client = docker.from_env()):
         for image in images:
             if image.attrs['RepoTags'] != [] and image.attrs['RepoTags'][0] != None:
                 dict_images[image.attrs['RepoTags'][0]] = image
+    client.close()
     return dict_images
 
 #获取所有容器内容
@@ -58,6 +63,7 @@ def getAll_containers_list(client = docker.from_env()):
     else:
         for container in containers:
             dict_containers[container.name] = container
+    client.close()
     return dict_containers
 
 #获取所有容器
@@ -70,6 +76,7 @@ def get_containers_list(client = docker.from_env()):
     else:
         for container in containers:
             dict_containers[container.name] = [container.short_id, container.id]
+    client.close()
     return dict_containers
 
 
@@ -85,6 +92,9 @@ class my_docker:
             self.image = self.get_client_images()                                                #属于该接口的镜像
         if containers == True:
             self.containers = self.get_client_containers()                                #该接口的容器列表
+    
+    def __delattr__(self):
+        self.client.close()
 
     #获取所有镜像
     def get_images_lists(self):
@@ -145,13 +155,12 @@ class my_docker:
         except Exception as err:
             print('image_build: ', err)
             clear_none_image()
-            self.clear_test_container()
         else:
-            self.clear_test_container()
             # self.clear_none_image_container()
             image = image[0]
             return image
         finally:
+            self.clear_test_container()
             os.chdir(old_path)
     
     def image_remove(self, image):
@@ -200,7 +209,7 @@ class my_docker:
             container_name = self.pluginname + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))           #新容器名称
             container_t = self.container_ceate(container_name)                      #创建新容器
             if container_t != None:                                                         #创建容器成功
-                container_t.stop()
+                container_t.pause()
                 temp_list.append(container_t)
             else:                                                                                              #创建容器失败
                 ran -= 1
@@ -219,6 +228,7 @@ class my_docker:
                 print('container_ceate: ', err)
                 return None
             else:
+                con.pause()
                 return con
 
     #从仓库中获取镜像
@@ -290,6 +300,7 @@ class my_docker:
         else:
             self.run_log.append('构建新镜像成功 ... ')
         finally:
+            self.clear_test_container()
             os.chdir(temp_path)
 
 

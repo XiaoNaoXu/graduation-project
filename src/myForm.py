@@ -107,6 +107,7 @@ class manageForm(FlaskForm):
     delete = simple.SubmitField('删除')
     cancel = simple.SubmitField('取消')
     commit = simple.SubmitField('提交')
+    container_add = simple.SubmitField('增加容器')
 
     plugin = simple.SubmitField('接口管理')
     image = simple.SubmitField('镜像管理')

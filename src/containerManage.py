@@ -19,7 +19,9 @@ def container_add():
 
 def container_delete(plugin):
     containers = getAll_containers_list()
-    print(containers_list)
+    for container in containers:
+        if plugin == container:
+            containers[container].remove(v = True, force = True)
 
 def container_pause():
     pass

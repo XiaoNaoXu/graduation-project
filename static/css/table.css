@@ -135,7 +135,7 @@ table .source-select{
 .index-image-labels{
     width: 8rem;
 }
-.index-image-os{
+.index-image-imagetype{
     width: 8rem;
 }
 .index-image-architecture{
@@ -148,7 +148,7 @@ table .source-select{
     width: 20rem;
 }
 .index-image-delete{
-    width: 5rem;
+    width: 10rem;
 }
 
 
@@ -166,7 +166,7 @@ table .source-select{
 .object-image-labels{
     height: 3rem;
 }
-.object-image-os{
+.object-image-imagetype{
     height: 3rem;
 }
 .object-image-architecture{
