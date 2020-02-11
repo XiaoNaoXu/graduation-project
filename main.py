@@ -586,7 +586,7 @@ def manage():
                                                 sources_dict[sename][0] = sources_content
                                 elif manageform.cancel.data:
                                         pass
-                                # return jsonify(sources_dict)
+                                return jsonify(sources_dict)
                         elif manage_select == 'image_add':
                                 if manageform.commit.data:
                                         other_data['basic_image'] = request.form.get('basic-image')
