@@ -135,7 +135,7 @@ class my_docker:
             return None
         else:
             for image in images:
-                if image.attrs['RepoTags'] != [] and image.attrs['RepoTags'][0][0:len(self.pluginname)] == self.pluginname:
+                if image.attrs['RepoTags'] != [] and image.attrs['RepoTags'][0].split(':')[0] == self.pluginname:
                     return image
                 elif image.attrs['RepoTags'] == []:
                     self.image_remove(image.id)
@@ -145,13 +145,11 @@ class my_docker:
 
     #创建镜像
     def image_build(self):
-        #Dcokerfile路径
-        path = self.config['moudles_path'][0] + self.pluginname + '/'
         #创建并返回该镜像
         old_path = os.getcwd()
         try:
-            os.chdir(path)
-            image = self.client.images.build(path = '.', tag = self.pluginname + ':' + self.config['image_tag'][0], nocache = True)
+            image = self.client.images.build(path = self.config['moudles_path'][0] + self.pluginname, 
+                                                                                tag = self.pluginname + ':' + self.config['image_tag'][0], nocache = True)
         except Exception as err:
             print('image_build: ', err)
             clear_none_image()
@@ -161,7 +159,6 @@ class my_docker:
             return image
         finally:
             self.clear_test_container()
-            os.chdir(old_path)
     
     def image_remove(self, image):
         containers = self.client.containers.list(all = True)
@@ -209,7 +206,6 @@ class my_docker:
             container_name = self.pluginname + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))           #新容器名称
             container_t = self.container_ceate(container_name)                      #创建新容器
             if container_t != None:                                                         #创建容器成功
-                container_t.pause()
                 temp_list.append(container_t)
             else:                                                                                              #创建容器失败
                 ran -= 1

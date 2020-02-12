@@ -1,4 +1,1 @@
-deb http://mirrors.sohu.com/debian/ lenny main non-free contrib
-deb http://mirrors.sohu.com/debian/ lenny-proposed-updates main non-free contrib
-deb-src http://mirrors.sohu.com/debian/ lenny main non-free contrib
-deb-src http://mirrors.sohu.com/debian/ lenny-proposed-updates main non-free contrib
+mirrors.sohu.com

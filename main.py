@@ -17,9 +17,21 @@ app.debug = 'True'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 #路由--------登录页面路由
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-           return render_template('login.html')
+        if request.method == 'GET':
+                return render_template('login.html')
+        elif request.method == 'POST':
+                data = dict()
+                data['x'] = request.form.get('ttarea')
+                data['y'] = request.form.get('ttarea')
+                data['z'] = request.form.get('ttarea')
+                return jsonify({'success': 200}, data)
+@app.route('/login/ttt', methods=['GET', 'POST'])
+def loginttt():
+        data = dict()
+        data['x'] = '1112aaaaawqesadada'
+        return json.dumps(data)
 
 #路由--------首页路由
 @app.route('/', methods = ['GET', 'POST'])
@@ -564,7 +576,7 @@ def manage():
                                         image_delete(sename)
                                         images.pop(sename)
                                 elif manageform.container_add.data:
-                                        con_docker_object = my_docker(sename, config = main_condist, filecode='--no-filecode', images=True, containers=False )
+                                        con_docker_object = my_docker(sename.split(':')[0], config = main_condist, filecode='--no-filecode', images=True, containers=False )
                                         container_name = sename.split(':')[0] + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))
                                         con_docker_object.container_ceate(container_name)
                         elif manage_select == 'container':
@@ -586,7 +598,6 @@ def manage():
                                                 sources_dict[sename][0] = sources_content
                                 elif manageform.cancel.data:
                                         pass
-                                return jsonify(sources_dict)
                         elif manage_select == 'image_add':
                                 if manageform.commit.data:
                                         other_data['basic_image'] = request.form.get('basic-image')
