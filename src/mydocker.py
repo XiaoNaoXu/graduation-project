@@ -1,7 +1,7 @@
 import docker, shutil
 import random
 import os, traceback
-from src.config2 import tar_file, un_tar
+from src.config2 import tar_file, un_tar, dockerfile_built_only_image
 
 #获取所有镜像，包括中间层
 def getAll_images_list(client = docker.from_env()):
@@ -271,19 +271,7 @@ class my_docker:
             self.run_log.append('软件源复制成功... ')
         with open(self.config['images_path'][0] + new_image + '/Dockerfile', 'w+') as f:
             f.truncate()
-            temp_str = '\nRUN '
-            f.write('FROM ' + basic_image)
-            f.write('\nCOPY sources.list /etc/apt/')
-            f.write('\nRUN apt-get update ')
-            if install_content != ''  and install_content != None:
-                install_content = install_content.split('\r\n')
-                for run in install_content:
-                    if run.strip() != '':
-                        if temp_str == '\nRUN ':
-                            temp_str += run.strip() + ' -y \ '
-                        else:
-                            temp_str += ' \n\t&& ' + run.strip() + ' -y \ '
-                f.write(temp_str)
+            f.write(dockerfile_built_only_image(self.config, new_image, basic_image, install_content, sources))
         self.run_log.append('开始构建新镜像 ... ')
         temp_path = os.getcwd()
         try:

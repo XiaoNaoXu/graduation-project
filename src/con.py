@@ -32,13 +32,54 @@ def isexit(var, templist):
                         return 1
         return 0
 
+def list_clear(plugin, main_condict):
+        temp = list()
+        moulists = readlist(main_condict)
+        for key in list(moulists.keys()):
+                for mou in moulists[key]:
+                        if plugin == mou:
+                                moulists[key].remove(plugin)
+                                break
+                if moulists[key] == []:
+                        moulists.pop(key)
+                else:
+                        temp.append('[' + key + ']\n')
+                        for mou in moulists[key]:
+                                temp.append('    ' + mou + '\n')
+        with open(main_condict['moudles_path'][0] + 'list', 'w+') as f:
+                f.truncate()
+                f.writelines(temp)
+
+def localfile_delete(filename, path):
+        if os.path.isdir(path + filename):
+                for files in os .listdir(path + filename):
+                        localfile_delete(files, path + filename + '/')
+                try:
+                        os.rmdir(path + filename)
+                except Exception as err:
+                        print('localfile_delete: ', err)
+        elif os.path.isfile(path + filename):
+                try:
+                        os.remove(path + filename)
+                except Exception as err:
+                        print('localfile_delete: ', err)
+        else:
+                return
+
+
 #读取接口配置文件
 def read_obiect_config(mouname, main_condist):
         flag = -1
         empty_dict = dict()
         obj_name = ''
         obj_list = list()
-        with open(main_condist['moudles_path'][0]+mouname+'/.Config', 'r') as cons:
+        try:
+                cons = open(main_condist['moudles_path'][0]+mouname+'/.Config', 'r')
+        except:
+                list_clear(mouname, main_condist)
+                localfile_delete(mouname, main_condist['file_path'][0])
+                localfile_delete(mouname, main_condist['moudles_path'][0])
+        else:
                 for con in cons.readlines():
                         #----------------------读取接口配置-----------start
                         if con.strip() == '[arguments]' and flag == -1:
@@ -152,3 +193,41 @@ def get_sources():
 
 def dict_sort(temp_dict):
         pass
+
+def sources_type(filepath):
+    with open(filepath, 'r') as f:
+        src_content = f.read().strip()
+        if src_content == 'deb':
+            return 'deb'
+        else:
+            return 'replace'
+
+def dockerfile_built(main_condist, pluginname, image, dependon_install, sources):
+        temp_str = ''
+        temp_str2 = 'FROM ' + image + '\nCOPY * ' + main_condist['container_moudel_path'][0]
+        if sources_type(main_condist['sources_path'][0] + sources + '/sources.list') == 'deb':
+                with open(main_condist['moudles_path'][0] + pluginname + '/sources.list', mode='w+') as f:
+                        with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
+                                f.write(f2.read())
+                temp_str2 += '\nCOPY sources.list /etc/apt/' + '\nCOPY * ' + main_condist['container_moudel_path'][0] + '\nRUN apt-get update \ ' \
+                                        + '\n && mkdir -p /home/plugin/data \ ' + '\n && mkdir -p /home/plugin/result '                               
+        else:
+                sel_sources = sources.split('-')[0] + '_sources_replace'
+                with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
+                        rep_content = f2.read().strip()
+                        for length in range(len(main_condist[sel_sources])):
+                                if length == 0:
+                                        temp_str2 += '\nRUN sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+                                else:
+                                        temp_str2 += '\n\t&& sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+                        temp_str2 += '\n\t&& apt-get update \ ' + '\n\t&& mkdir -p /home/plugin/data \ ' + '\n\t&& mkdir -p /home/plugin/result '
+                if dependon_install != ''  and dependon_install != None:
+                        temp_str = '\nRUN '
+                        dependon_install = dependon_install.split('\r\n')
+                        for run in dependon_install:
+                                if run.strip() != '':
+                                        if temp_str == '\nRUN ':
+                                                temp_str += run.strip() + ' -y \ '
+                                        else:
+                                                temp_str += ' \n        && ' + run.strip() + ' -y \ '
+        return temp_str + temp_str2

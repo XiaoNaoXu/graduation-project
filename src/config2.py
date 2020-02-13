@@ -14,3 +14,41 @@ def un_tar(file_name, file_path):
     for name in names: 
         tar.extract(name, path = file_path)
     tar.close()
+
+def sources_type(filepath):
+    with open(filepath, 'r') as f:
+        src_content = f.read().strip()
+        if src_content == 'deb':
+            return 'deb'
+        else:
+            return 'replace'
+
+def dockerfile_built_only_image(main_condist, new_image, image, dependon_install, sources):
+        temp_str = ''
+        temp_str2 = 'FROM ' + image + '\nCOPY * ' + main_condist['container_moudel_path'][0]
+        if sources_type(main_condist['sources_path'][0] + sources + '/sources.list') == 'deb':
+                with open(main_condist['moudles_path'][0] + new_image + '/sources.list', mode='w+') as f:
+                        with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
+                                f.write(f2.read())
+                temp_str2 += '\nCOPY sources.list /etc/apt/' + '\nCOPY * ' + main_condist['container_moudel_path'][0] + '\nRUN apt-get update \ ' \
+                                        + '\n && mkdir -p /home/plugin/data \ ' + '\n && mkdir -p /home/plugin/result '                               
+        else:
+                sel_sources = sources.split('-')[0] + '_sources_replace'
+                with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
+                        rep_content = f2.read().strip()
+                        for length in range(len(main_condist[sel_sources])):
+                                if length == 0:
+                                        temp_str2 += '\nRUN sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+                                else:
+                                        temp_str2 += '\n\t&& sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+                        temp_str2 += '\n\t&& apt-get update \ ' + '\n\t&& mkdir -p /home/plugin/data \ ' + '\n\t&& mkdir -p /home/plugin/result '
+                if dependon_install != ''  and dependon_install != None:
+                        temp_str = '\nRUN '
+                        dependon_install = dependon_install.split('\r\n')
+                        for run in dependon_install:
+                                if run.strip() != '':
+                                        if temp_str == '\nRUN ':
+                                                temp_str += run.strip() + ' -y \ '
+                                        else:
+                                                temp_str += ' \n        && ' + run.strip() + ' -y \ '
+        return temp_str + temp_str2
