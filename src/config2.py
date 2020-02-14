@@ -51,4 +51,4 @@ def dockerfile_built_only_image(main_condist, new_image, image, dependon_install
                                                 temp_str += run.strip() + ' -y \ '
                                         else:
                                                 temp_str += ' \n        && ' + run.strip() + ' -y \ '
-        return temp_str + temp_str2
+        return  temp_str2 + temp_str

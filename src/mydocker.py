@@ -275,8 +275,7 @@ class my_docker:
         self.run_log.append('开始构建新镜像 ... ')
         temp_path = os.getcwd()
         try:
-            os.chdir(self.config['images_path'][0] + new_image)
-            self.client.images.build(path = '.', tag =new_image + ':' + self.config['basic_image_tag'][0] , nocache = True)
+            self.client.images.build(path = self.config['image_path'][0] + 'images', tag =new_image + ':' + self.config['basic_image_tag'][0] , nocache = True)
         except Exception as err:
             print(err)
             self.clear_test_container()
