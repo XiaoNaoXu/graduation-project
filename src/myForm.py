@@ -25,7 +25,7 @@ class addForm(FlaskForm):
             raise ValidationError('Must be 42.')
     language = core.SelectField(
         label = '基础环境镜像：',
-        choices=language_choices()
+        choices = language_choices(),
     )
     pluginname = simple.StringField(
         label= '接口名称:',
@@ -85,6 +85,10 @@ class addForm(FlaskForm):
         label='文件选择：',
         validators=[FileRequired(), 
                                 FileAllowed(['jpg','jpeg','png','gif'])]
+    )
+    runCommand = simple.StringField(
+        label = '运行命令：',
+        widget=widgets.TextInput()
     )
     detail = TextAreaField(
         label='接口描述：',

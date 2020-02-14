@@ -225,6 +225,7 @@ section .no-padding{
     display: flex;
 }
 .row1 .col1{
+    display: flex;
     width: 35rem;
     padding-left: 1rem;
     padding-right: 1rem;
