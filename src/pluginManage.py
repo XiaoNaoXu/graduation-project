@@ -18,7 +18,7 @@ def plugin_update(plugin, configs):
 
 def plugin_add(main_condist, pluginname, image, inputfilename, inputtype, dependon_install, detail, sources, files):
     if not os.path.exists(main_condist['moudles_path'][0] + pluginname):
-        os.mkdir(main_condist['moudles_path'][0] + pluginname)
+        os.makedirs(main_condist['moudles_path'][0] + pluginname)
         with open(main_condist['moudles_path'][0] + 'list', 'r+') as f:
             lines = f.readlines()
             f.seek(0,0)
@@ -36,7 +36,7 @@ def plugin_add(main_condist, pluginname, image, inputfilename, inputtype, depend
             f.seek(0,0)
             f.truncate()
             f.writelines(lines)
-        os.mkdir(main_condist['file_path'][0] + pluginname)
+        os.makedirs(main_condist['file_path'][0] + pluginname)
     # with open(main_condist['moudles_path'][0] + pluginname + '/__init__.py', mode='r') as f:
     #         pass
     with open(main_condist['moudles_path'][0] + pluginname + '/Dockerfile', mode='w+') as f:

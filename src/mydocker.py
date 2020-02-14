@@ -261,7 +261,7 @@ class my_docker:
             self.run_log.append('新镜像名已被使用 ... ')
             return
         if not os.path.isdir(self.config['images_path'][0] + new_image):
-            os.mkdir(self.config['images_path'][0] + new_image)
+            os.makedirs(self.config['images_path'][0] + new_image)
         try:
             shutil.copyfile(self.config['sources_path'][0] + sources + '/sources.list', self.config['images_path'][0] + new_image + '/sources.list')
         except Exception as err:
@@ -321,7 +321,7 @@ class my_docker:
         s_path = self.config['container_rel_path'][0]
         d_path = path+ self.config['container_rtar_name'][0]
         if not os.path.isdir(path):
-            os.mkdir(path)
+            os.makedirs(path)
         with open(d_path, 'wb') as f:
             bits, stat = container.get_archive(s_path)
             for bit in bits:

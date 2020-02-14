@@ -149,7 +149,7 @@ def index():
                                                                 if not os.path.isdir(temppath):
                                                                         filecode = ''.join(random.sample(main_condist['codestr'][0],main_condist['filecode_length'][0]))
                                                                         temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/'
-                                                                        os.mkdir(temppath)
+                                                                        os.makedirs(temppath)
                                                                 with open(temppath + con_temp['inputfilename'][0] + '.' + intype, 'w+') as fo:
                                                                         fo.writelines(text)
                                                                         break
@@ -172,9 +172,9 @@ def index():
                                                 if not os.path.isdir(temppath):
                                                         filecode = ''.join(random.sample(main_condist['codestr'][0], int(main_condist['filecode_length'][0])))
                                                         temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/'
-                                                        os.mkdir(temppath)
+                                                        os.makedirs(temppath)
                                                         temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/'
-                                                        os.mkdir(temppath)
+                                                        os.makedirs(temppath)
                                                 f.save(os.path.join(temppath, filename))
                                         #如果有上传文件，就循环保存文件---------------------------------------------------------------------end
                 #分离输入输入类型并计算变量个数
@@ -615,7 +615,7 @@ def manage():
                                 if manageform.commit.data:
                                         sources_name = request.form.get('sources-name')
                                         if os.path.isdir(main_condist['sources_path'][0]) and not os.path.isdir(main_condist['sources_path'][0] + sources_name):
-                                                os.mkdir(main_condist['sources_path'][0] + sources_name)
+                                                os.makedirs(main_condist['sources_path'][0] + sources_name)
                                         sources_content = request.form.get('sources-content')
                                         with open(main_condist['sources_path'][0] + sources_name + '/sources.list', 'w+') as f:
                                                 f.write(sources_content)
