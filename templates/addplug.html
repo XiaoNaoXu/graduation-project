@@ -7,6 +7,38 @@
     <link rel="stylesheet" href="static/css/body.css">
     <link rel="stylesheet" href="static/css/header.css" >
     <script type="text/javascript" src="../static/js/position.js"></script>
+    <script>
+        function submit11(form){
+            var reg = /^\s*|\s*$/g;
+            if (form.pluginname.value.replace(reg,'') == ""){
+                alert ("请输入接口名称");
+                return false;
+            }
+            else if (form.inputfilename.value.replace(reg,'') == ""){
+                alert ("请输入文件名");
+                return false;
+            }
+            else if (form.textarea.value.replace(reg,'') == ""){
+                alert ("请输入接口运行环境");
+                return false;
+            }
+            else if (form.pluginfile.value.replace(reg,'') == ""){
+                alert ("请选择文件");
+                return false;
+            }
+            else if (form.runCommand.value.replace(reg,'') == ""){
+                alert ("请输入运行命令");
+                return false;
+            }
+            else if (form.detail.value.replace(reg,'') == ""){
+                alert ("请输入描述信息");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -75,7 +107,9 @@
 
     <div class="right">
         <div class="page-header"> 
+            <div class="oo-mean">
                 增加接口
+            </div>   
         </div>
         <form action="" method="POST" enctype="multipart/form-data">
         <div style="width: 70rem;padding-left: 3rem;">
@@ -90,8 +124,7 @@
                     <div class="col1">
                             <div id="language" >
                                     {{myform.pluginname.label}} 
-                                    {{myform.pluginname}}
-                                    
+                                    {{myform.pluginname(id='pluginname') }}
                                 </div>
                                 <div style="color: rgb(211, 80, 48);">
                                     {{get_flashed_messages()[0]}}
@@ -101,46 +134,40 @@
                 <div class="row2">
                     <div class="col1">
                         {{myform.inputfilename.label}}
-                        {{myform.inputfilename}}
+                        {{myform.inputfilename(id='inputfilename')}}
                     </div>
                     <div class="col1">
                         {{myform.inputtype.label}}
-                        {{myform.inputtype}}
+                        {{myform.inputtype(id='inputtype')}}
                     </div>
                 </div>
-                <!-- <div class="row3">
-                    <div class="col1">
-                        {{myform.outputfilename.label}}
-                        {{myform.outputfilename}}
-                    </div>
-                    <div class="col1">
-                        {{myform.outputtype.label}}
-                        {{myform.outputtype}}
-                    </div>
-                </div> -->
                 <div class="row4">
                     <div class="col2">
                         {{myform.sources.label}}
-                        {{myform.sources}}
+                        {{myform.sources(id='sources')}}
                     </div>
                     <div class="col1">
                         {{myform.textarea.label}}
-                        {{myform.textarea}}
+                        {{myform.textarea(id='textarea')}}
                     </div>
                 </div>
                 <div class="row5"> 
                     <div class="col1">
                         {{myform.pluginfile.label}}
-                        {{myform.pluginfile(multiple='multiple')}}
+                        {{myform.pluginfile(multiple='multiple', id='pluginfile')}}
+                    </div>
+                    <div class="col2">
+                        {{ myform.runCommand.label }}
+                        {{ myform.runCommand(id='runCommand') }}
                     </div>
                 </div>
                 <div class="row6"> 
                     <div>
                             {{myform.detail.label}}
-                            {{myform.detail}}
+                            {{myform.detail(id='detail')}}
                     </div>
                     <div class="col1">
-                        {{myform.save}}<br>
+                        {{myform.save(onclick='return submit11(this.form);')}}<br>
                         {{myform.pulish}}
                     </div>
                 </div>

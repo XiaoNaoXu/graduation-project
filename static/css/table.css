@@ -24,7 +24,7 @@ table{
 }
 .index-detail{
     color: rgb(240, 91, 6); 
-    width: 10rem;
+    width: 20rem;
 }
 .index-edit{
     color: rgb(240, 91, 6); 
@@ -53,7 +53,7 @@ table{
     width: 8rem;
 }
 .object-detail{
-    width: 10rem;
+    width: 20rem;
 }
 .object-edit{
     width: 10rem;

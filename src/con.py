@@ -9,20 +9,20 @@ def configurations():
                         world = world
                         excel = xls,xlsw
 
-                        codestr = ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-                        filecode_length = 16
-                        file_path = ./static/file/
-                        moudles_path = ./moudles/
-                        sources_path = ./sources/
+                        CodeStr = ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+                        FileCodeLength = 16
+                        SDFilePath = ./static/file/
+                        MoudlesPath = ./moudles/
+                        SourcesPath = ./sources/
 
-                        image_tag = plugin
-                        init_plugin_container_number = 3
-                        container_src_path = /home/plugin/data/
-                        container_rel_path = /home/plugin/result/
-                        container_tar_name = data.tar.gz
-                        container_rtar_name = result.tar.gz
-                        container_schema_run = /bin/bash
-                        container_schema_test = /bin/sh -c "while true;do echo hello;sleep 1;done"
+                        ImageTag = plugin
+                        InitPluginContainerNumber = 3
+                        ContainerSrcPath = /home/plugin/data/
+                        ContainerRelPath = /home/plugin/result/
+                        ContainerTarName = data.tar.gz
+                        ContainerRTarName = result.tar.gz
+                        ContainerSchemaRun = /bin/bash
+                        ContainerSchemaTest = /bin/sh -c "while true;do echo hello;sleep 1;done"
                 """
 
 #判断变量是否存在列表中
@@ -46,7 +46,7 @@ def list_clear(plugin, main_condict):
                         temp.append('[' + key + ']\n')
                         for mou in moulists[key]:
                                 temp.append('    ' + mou + '\n')
-        with open(main_condict['moudles_path'][0] + 'list', 'w+') as f:
+        with open(main_condict['MoudlesPath'][0] + 'list', 'w+') as f:
                 f.truncate()
                 f.writelines(temp)
 
@@ -68,17 +68,17 @@ def localfile_delete(filename, path):
 
 
 #读取接口配置文件
-def read_obiect_config(mouname, main_condist):
+def read_obiect_config(mouname, main_condict):
         flag = -1
         empty_dict = dict()
         obj_name = ''
         obj_list = list()
         try:
-                cons = open(main_condist['moudles_path'][0]+mouname+'/.Config', 'r')
+                cons = open(main_condict['MoudlesPath'][0]+mouname+'/.Config', 'r')
         except:
-                list_clear(mouname, main_condist)
-                localfile_delete(mouname, main_condist['file_path'][0])
-                localfile_delete(mouname, main_condist['moudles_path'][0])
+                list_clear(mouname, main_condict)
+                localfile_delete(mouname, main_condict['SDFilePath'][0])
+                localfile_delete(mouname, main_condict['MoudlesPath'][0])
         else:
                 for con in cons.readlines():
                         #----------------------读取接口配置-----------start
@@ -105,9 +105,9 @@ def read_obiect_config(mouname, main_condist):
         return empty_dict
 
 #读取接口列表
-def readlist(main_condist):
+def readlist(main_condict):
         moulists = dict()
-        with open(main_condist['moudles_path'][0] + 'list', 'r') as fo:
+        with open(main_condict['MoudlesPath'][0] + 'list', 'r') as fo:
                 for line in fo.readlines():
                         line = line.strip()
                         if line != '' and line != None:
@@ -170,11 +170,11 @@ def language_choices():
 
 #获取软件源：
 def sources_choices():
-        main_condist = main_con()
+        main_condict = main_con()
         list_sources = list()
-        if os.path.isdir(main_condist['sources_path'][0]):
-                for dirs in os.listdir(main_condist['sources_path'][0]):
-                        if os.path.isfile(main_condist['sources_path'][0] + dirs + '/sources.list'):
+        if os.path.isdir(main_condict['SourcesPath'][0]):
+                for dirs in os.listdir(main_condict['SourcesPath'][0]):
+                        if os.path.isfile(main_condict['SourcesPath'][0] + dirs + '/sources.list'):
                                 t  = (dirs, dirs)
                                 list_sources.append(t)
         list_sources.sort()
@@ -182,11 +182,11 @@ def sources_choices():
 
 #获取软件源：
 def get_sources():
-        main_condist = main_con()
+        main_condict = main_con()
         list_sources = list()
-        if os.path.isdir(main_condist['sources_path'][0]):
-                for dirs in os.listdir(main_condist['sources_path'][0]):
-                        if os.path.isfile(main_condist['sources_path'][0] + dirs + '/sources.list'):
+        if os.path.isdir(main_condict['SourcesPath'][0]):
+                for dirs in os.listdir(main_condict['SourcesPath'][0]):
+                        if os.path.isfile(main_condict['SourcesPath'][0] + dirs + '/sources.list'):
                                 list_sources.append(dirs)
         list_sources.sort()
         return list_sources
@@ -202,32 +202,31 @@ def sources_type(filepath):
         else:
             return 'replace'
 
-def dockerfile_built(main_condist, pluginname, image, dependon_install, sources):
+def dockerfile_built(main_condict, pluginname, image, dependon_install, sources):
         temp_str = ''
-        temp_str2 = 'FROM ' + image + '\nCOPY * ' + main_condist['container_moudel_path'][0]
-        if sources_type(main_condist['sources_path'][0] + sources + '/sources.list') == 'deb':
-                with open(main_condist['moudles_path'][0] + pluginname + '/sources.list', mode='w+') as f:
-                        with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
-                                f.write(f2.read())
-                temp_str2 += '\nCOPY sources.list /etc/apt/' + '\nCOPY * ' + main_condist['container_moudel_path'][0] + '\nRUN apt-get update \ ' \
-                                        + '\n && mkdir -p /home/plugin/data \ ' + '\n && mkdir -p /home/plugin/result '                               
-        else:
-                sel_sources = sources.split('-')[0] + '_sources_replace'
-                with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
-                        rep_content = f2.read().strip()
-                        for length in range(len(main_condist[sel_sources])):
-                                if length == 0:
-                                        temp_str2 += '\nRUN sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+        temp_str2 = 'FROM ' + image + '\nCOPY * ' + main_condict['ContainerMoudelPath'][0]
+        if dependon_install != ''  and dependon_install != None:
+                temp_str = '\nRUN '
+                dependon_install = dependon_install.split('\r\n')
+                for run in dependon_install:
+                        if run.strip() != '':
+                                if temp_str == '\nRUN ':
+                                        temp_str += run.strip() + ' -y \ '
                                 else:
-                                        temp_str2 += '\n\t&& sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
-                        temp_str2 += '\n\t&& apt-get update \ ' + '\n\t&& mkdir -p /home/plugin/data \ ' + '\n\t&& mkdir -p /home/plugin/result '
-                if dependon_install != ''  and dependon_install != None:
-                        temp_str = '\nRUN '
-                        dependon_install = dependon_install.split('\r\n')
-                        for run in dependon_install:
-                                if run.strip() != '':
-                                        if temp_str == '\nRUN ':
-                                                temp_str += run.strip() + ' -y \ '
+                                        temp_str += ' \n        && ' + run.strip() + ' -y \ '
+                if sources_type(main_condict['SourcesPath'][0] + sources + '/sources.list') == 'deb':
+                        with open(main_condict['MoudlesPath'][0] + pluginname + '/sources.list', mode='w+') as f:
+                                with open(main_condict['SourcesPath'][0] + sources + '/sources.list', mode='r+') as f2:
+                                        f.write(f2.read())
+                        temp_str2 += '\nCOPY sources.list /etc/apt/' + '\nCOPY * ' + main_condict['ContainerMoudelPath'][0] + '\nRUN apt-get update  '                       
+                else:
+                        sel_sources = sources.split('-')[0] + 'SourcesReplace'
+                        with open(main_condict['SourcesPath'][0] + sources + '/sources.list', mode='r+') as f2:
+                                rep_content = f2.read().strip()
+                                for length in range(len(main_condict[sel_sources])):
+                                        if length == 0:
+                                                temp_str2 += '\nRUN sed -i "s/' + main_condict[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
                                         else:
-                                                temp_str += ' \n        && ' + run.strip() + ' -y \ '
-        return temp_str + temp_str2
+                                                temp_str2 += '\n\t&& sed -i "s/' + main_condict[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+                                temp_str2 += '\n\t&& apt-get update \ '
+        return temp_str2 + temp_str

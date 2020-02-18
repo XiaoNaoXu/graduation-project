@@ -18,11 +18,6 @@ class myForm(FlaskForm):
     publish = simple.SubmitField('运行')
 
 class addForm(FlaskForm):
-    def validate_pluginname(myform, field):
-        list1 = ['t1', 't2', 't10', '3']
-        print(list1)
-        if field.data in list1:
-            raise ValidationError('Must be 42.')
     language = core.SelectField(
         label = '基础环境镜像：',
         choices = language_choices(),
@@ -30,8 +25,8 @@ class addForm(FlaskForm):
     pluginname = simple.StringField(
         label= '接口名称:',
         widget=widgets.TextInput(),
-        validators=[DataRequired(message='接口名称不能为空'), 
-                                NoneOf(['t1', 't2', 't10', '3'], message='wuxiao', values_formatter = 'caonima')]
+        # validators=[DataRequired(message='接口名称不能为空'), 
+        #                         NoneOf(['t1', 't2', 't10', '3'], message='wuxiao', values_formatter = 'caonima')]
         # render_kw={
         #     "placeholder":"请输入账号!",
         #     "required":'required'               #表示输入框不能为空，并有提示信息
@@ -40,7 +35,7 @@ class addForm(FlaskForm):
     inputfilename = simple.StringField(
         label = '输入文件名：',
         widget=widgets.TextInput(),
-        validators=[DataRequired()]
+        # validators=[DataRequired()]
     )
     inputtype = core.SelectMultipleField(
         label='输入数据类型：',
@@ -83,8 +78,8 @@ class addForm(FlaskForm):
     )
     pluginfile = FileField(
         label='文件选择：',
-        validators=[FileRequired(), 
-                                FileAllowed(['jpg','jpeg','png','gif'])]
+        # validators=[FileRequired(), 
+        #                         FileAllowed(['jpg','jpeg','png','gif'])]
     )
     runCommand = simple.StringField(
         label = '运行命令：',
@@ -95,7 +90,7 @@ class addForm(FlaskForm):
         render_kw={
             'class' : 'text-detail'
         },
-        validators=[DataRequired()]
+        # validators=[DataRequired()]
     )
     save = simple.SubmitField('检查')
     pulish = simple.SubmitField('提交')

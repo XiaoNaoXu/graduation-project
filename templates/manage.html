@@ -10,6 +10,9 @@
     <script type="text/javascript" src="../static/js/position.js"></script>
     <script type="text/javascript" src='../static/js/temp.js'></script>
     <script>
+        function changeStyle(elemid) {
+            elemid.setAttribute("class", "se-second-meau");
+        }
         function get_id(elemid){
             var t=document.getElementById("txt");
             t.value = elemid.id;
@@ -92,15 +95,44 @@
     </nav>
 
     <div class="right">
+        <form action="" method="POST">
         <div class="page-header"> 
-                接口管理
+            {% if manage_select ==  'plugin' %}
+                {{ manageform.plugin(class='se-second-meau' , id='plugin', onclick='changeStyle(this)') }}
+            {% else %}
+                {{ manageform.plugin(class='second-meau' , id='plugin', onclick='changeStyle(this)') }}
+            {% endif %}
+            {% if manage_select ==  'image' %}
+                {{ manageform.image(class='se-second-meau' , id='image', onclick='changeStyle(this)') }}
+            {% else %}
+                {{ manageform.image(class='second-meau' , id='image', onclick='changeStyle(this)') }}    
+            {% endif %}
+            {% if manage_select ==  'container' %}
+                {{ manageform.container(class='se-second-meau' , id='container', onclick='changeStyle(this)') }}
+            {% else %}
+                {{ manageform.container(class='second-meau' , id='container', onclick='changeStyle(this)') }} 
+            {% endif %}
+            {% if manage_select ==  'sources' %}
+                {{ manageform.sources(class='se-second-meau' , id='sources', onclick='changeStyle(this)') }}
+            {% else %}
+                {{ manageform.sources(class='second-meau' , id='sources', onclick='changeStyle(this)') }}
+            {% endif %}
+            {% if manage_select ==  'image_add' %}
+                {{ manageform.image_add(class='se-second-meau' , id='image_add', onclick='changeStyle(this)') }}
+            {% else %}
+                {{ manageform.image_add(class='second-meau' , id='image_add', onclick='changeStyle(this)') }} 
+            {% endif %}
+            {% if manage_select ==  'other_add' %}
+                {{ manageform.other_add(class='se-second-meau' , id='other_add', onclick='changeStyle(this)') }}
+            {% else %}
+                {{ manageform.other_add(class='second-meau' , id='other_add', onclick='changeStyle(this)') }}
+            {% endif %}
         </div>
         <section>
             <div style="padding-left: 0.5rem;">
-                <form action="" method="POST">
+                
                     <div id='test1' style="height: 3rem; background: #34373d; background-image:linear-gradient(141deg,#160c07 0%,#1fc8db 51%,#494745 75%)">
-                        {{ manageform.plugin }}   {{ manageform.image }}    {{ manageform.container }}    {{ manageform.sources }}
-                        {{ manageform.image_add }}    {{ manageform.other_add }}
+                        
                     </div>
                     <input type="hidden" name = 'manage_select' id="manage_select" value={{ manage_select }}>
                     <input type="hidden" name = 'txt' id="txt" value='' size="30"/>
@@ -108,8 +140,8 @@
                         <table id="table">
                             <tr class="index-image">
                                 <td class="index-image-name">镜像</td>
-                                <td class="index-image-name">父镜像</td>
-                                <td class="index-image-id">镜像ID</td>
+                                <td class="index-image-name">镜像ID</td>
+                                <td class="index-image-id">父镜像</td>
                                 <td class="index-image-labels">作者</td>
                                 <td class="index-image-imagetype">镜像类型</td>
                                 <td class="index-image-architecture">处理器架构</td>
@@ -203,7 +235,7 @@
                                     <div style="padding:1rem; width: 100%; height: 100%; display: flex; ">
                                         <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
                                             <div>基础镜像：<input type="text" name="basic-image" placeholder="例如：ubunut:19.10" value={{other_data['basic_image']}}></div>
-                                            <div>新镜像名称：<input type="text" name="image-tag" placeholder="没有例如，英文加数字就行" value={{other_data['image_tag']}}>:basic</div>
+                                            <div>新镜像名称：<input type="text" name="image-tag" placeholder="没有例如，英文加数字就行" value={{other_data['ImageTag']}}>:basic</div>
                                         </div>
                                         <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
                                             <select class="source-select"  name="source-select" > 

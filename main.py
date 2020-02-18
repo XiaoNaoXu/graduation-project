@@ -36,13 +36,13 @@ def loginttt():
 #路由--------首页路由
 @app.route('/', methods = ['GET', 'POST'])
 def index():
-        num = [0, 0, 0, 0]
+        PluginNum = [0, 0, 0, 0]
         #读取框架配置参数
-        main_condist = main_con()
+        main_condict = main_con()
         #读取接口列表
-        moulists = readlist(main_condist)
+        moulists = readlist(main_condict)
         #计算语言数量
-        num[0] = len(moulists)
+        PluginNum[0] = len(moulists)
         myform = myForm()       #前端页面表单构造
         languages = list()              #存放语言的空列表
         plugins = list()                #存放接口名称的空列表
@@ -59,7 +59,7 @@ def index():
                                                                 plugins = plugins, seplugin = '', 
                                                                 intypes = intypes,  seintype = '',
                                                                 text = text, myform = myform,
-                                                                nums = num, details = '',
+                                                                nums = PluginNum, details = '',
                                                                 ftype = 'text', filecode = 'none')
 
         #页面请求为GET
@@ -70,10 +70,10 @@ def index():
                 languages.sort()
                 #分别分离接口名称，输入类型，输出名称并计算变量个数----start
                 plugins = moulists[languages[0]]
-                num[1]= len(plugins)
-                con_temp = read_obiect_config(plugins[0], main_condist)
+                PluginNum[1]= len(plugins)
+                con_temp = read_obiect_config(plugins[0], main_condict)
                 intypes = con_temp['inputtype']
-                num[2] = len(intypes)
+                PluginNum[2] = len(intypes)
                 #分别分离接口名称，输入类型，输出名称并计算变量个数----end
                 #返回模板
                 return render_template('index.html',
@@ -81,7 +81,7 @@ def index():
                                                                 plugins = plugins, seplugin = '', 
                                                                 intypes = intypes,  seintype = '',
                                                                 text = text, myform = myform,
-                                                                nums = num, details = con_temp['detail'],
+                                                                nums = PluginNum, details = con_temp['detail'],
                                                                 ftype = 'text', filecode = 'none')
         
         #页面请求方式为POST
@@ -102,17 +102,17 @@ def index():
                 languages.sort()
                 #分离接口名称列表
                 plugins = moulists[language]
-                num[1] = len(plugins)
+                PluginNum[1] = len(plugins)
                 
                 #页面刷新判断接口名称是否存在
                 if isexit(plugin, plugins) == 0:
                         plugin = plugins[0]
 
                 #读取该接口的配置参数
-                con_temp = read_obiect_config(plugin, main_condist)
+                con_temp = read_obiect_config(plugin, main_condict)
 
                 intypes = con_temp['inputtype']
-                num[2] = len(intypes)
+                PluginNum[2] = len(intypes)
 
                 #收到来自前端页面的按钮点击
                 if myform.validate_on_submit:
@@ -122,16 +122,16 @@ def index():
                                 if filecode != 'none': 
                                         text = request.form.get('textarea')
                                         if text != '':
-                                                temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/'
+                                                temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/'
                                                 # plat = Platform(plugin, temppath)
-                                                docker = my_docker(plugin, main_condist, filecode)
+                                                docker = my_docker(plugin, main_condict, filecode, plugin_config = con_temp)
                                                 docker.containers_start()
                                                 return redirect(url_for('resullt', pluginname = plugin, findfilecode = filecode))
                         
                         #删除按钮的动作
                         elif myform.delete.data:
                                 if sefilename != None:
-                                        delete_path = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/' + sefilename
+                                        delete_path = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/data/' + sefilename
                                         if  os.path.isfile(delete_path):
                                                 os.remove(delete_path)
 
@@ -144,11 +144,11 @@ def index():
                                         if f.filename == '':
                                                 text = request.form.get('textarea')
                                                 if text != '' and text != None:
-                                                        temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/'
+                                                        temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/data/'
                                                         if text != '内容不可读！':
                                                                 if not os.path.isdir(temppath):
-                                                                        filecode = ''.join(random.sample(main_condist['codestr'][0],main_condist['filecode_length'][0]))
-                                                                        temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/'
+                                                                        filecode = ''.join(random.sample(main_condict['CodeStr'][0],main_condict['FileCodeLength'][0]))
+                                                                        temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/data/'
                                                                         os.makedirs(temppath)
                                                                 with open(temppath + con_temp['inputfilename'][0] + '.' + intype, 'w+') as fo:
                                                                         fo.writelines(text)
@@ -160,7 +160,7 @@ def index():
                                                 #                                                         intypes = intypes,  seintype = intype,
                                                 #                                                         outtypes = outtypes, seouttype = outtype,
                                                 #                                                         text = text, myform = myform,
-                                                #                                                         nums = num, details = con_temp['detail'],
+                                                #                                                         nums = PluginNum, details = con_temp['detail'],
                                                 #                                                         ftype = 'text', filecode = filecode,
                                                 #                                                         sefilename = sefilename)
                                         #如果没上传文件，就获取文本款的内容，根据选择的格式保存-------end
@@ -168,19 +168,19 @@ def index():
                                         #如果有上传文件，就循环保存文件------------------------------------------------------------------start
                                         else:
                                                 filename = f.filename
-                                                temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/'
+                                                temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/data/'
                                                 if not os.path.isdir(temppath):
-                                                        filecode = ''.join(random.sample(main_condist['codestr'][0], int(main_condist['filecode_length'][0])))
-                                                        temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/'
+                                                        filecode = ''.join(random.sample(main_condict['CodeStr'][0], int(main_condict['FileCodeLength'][0])))
+                                                        temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/'
                                                         os.makedirs(temppath)
-                                                        temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/'
+                                                        temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/data/'
                                                         os.makedirs(temppath)
                                                 f.save(os.path.join(temppath, filename))
                                         #如果有上传文件，就循环保存文件---------------------------------------------------------------------end
                 #分离输入输入类型并计算变量个数
                 if filecode != '' and filecode != None and filecode != 'none':
                         #获取文件列表------------------------------------------------------------------------------satrt
-                        temppath = main_condist['file_path'][0] + plugin + '/' + filecode + '/data/'
+                        temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/data/'
                         if os.path.isdir(temppath):
                                 if os.path.isdir(temppath):
                                         for t_filename in os.listdir(temppath):
@@ -197,7 +197,7 @@ def index():
                                                 pass
                                         # fftype = filetype.guess(temppath + sefilename)
                                         # print(fftype.mime)
-                                        ftype = type_find(ext, main_condist)
+                                        ftype = type_find(ext, main_condict)
                                         if ftype == None and ext == '':
                                                 ftype = 'text'
                                         #如果文件类型为图片，就构造href，传递给前端显示
@@ -224,20 +224,17 @@ def index():
                                                                 plugins = plugins, seplugin = plugin, 
                                                                 intypes = intypes,  seintype = intype,
                                                                 text = text, myform = myform, filecode = filecode,
-                                                                nums = num, details = con_temp['detail'], 
+                                                                nums = PluginNum, details = con_temp['detail'], 
                                                                 ftype = ftype, href = href,
                                                                 filenames = filenames, sefilename = sefilename)
 
 #路由--------添加接口页面路由
 @app.route('/addplug', methods = ['GET', 'POST'])
 def addplug():
-        num = [0, 0, 0, 0]
         #读取框架配置参数
-        main_condist = main_con()
+        main_condict = main_con()
         #读取接口列表
-        moulists = readlist(main_condist)
-        #计算语言数量
-        num[0] = len(moulists)
+        moulists = readlist(main_condict)
         myform = addForm()   #添加接口页面表单构造
         myform.sources.choices = sources_choices()
         myform.language.choices = language_choices()
@@ -268,10 +265,11 @@ def addplug():
                                 inputtype = myform.inputtype.data
                                 #所需
                                 dependon_install = myform.textarea.data
+                                runcommand = myform.runCommand.data
                                 detail = myform.detail.data
                                 sources = myform.sources.data
                                 files = request.files.getlist('pluginfile')
-                                plugin_add(main_condist, pluginname, image, inputfilename, inputtype, dependon_install, detail, sources, files)
+                                plugin_add(main_condict, pluginname, image, inputfilename, inputtype, dependon_install, detail, sources, files, runcommand)
                                 return render_template('addplug.html', myform = myform)
                         elif myform.save.data:
                                 return render_template('addplug.html', myform = myform)
@@ -280,15 +278,12 @@ def addplug():
 #路由--------直接点击结果页面路由
 @app.route('/result', methods = ['GET','POST'])
 def result(text = ''):
-        num = [0, 0, 0, 0]
         moulists = dict()
-        main_condist = dict()
+        main_condict = dict()
         #读取框架配置参数
-        main_condist = main_con()
+        main_condict = main_con()
         #读取接口列表
-        moulists = readlist(main_condist)
-        #计算语言数量
-        num[0] = len(moulists)
+        moulists = readlist(main_condict)
         ext = ''
         href = ''
         filecode = ''
@@ -346,7 +341,7 @@ def result(text = ''):
                                                         ext = sefilename.split('.')[1]
                                                 except:
                                                         pass
-                                                ftype = type_find(ext, main_condist)
+                                                ftype = type_find(ext, main_condict)
                                                 if ftype == None and ext == '':
                                                         ftype = 'text'
                                                 #如果文件类型为图片，就构造href，传递给前端显示
@@ -376,13 +371,10 @@ def result(text = ''):
 #路由--------计算跳转结果页面路由
 @app.route('/resullt/<pluginname>, <findfilecode>', methods = ['GET', 'POST'])
 def resullt(pluginname, findfilecode):
-        num = [0, 0, 0, 0]
         #读取框架配置参数
-        main_condist = main_con()
+        main_condict = main_con()
         #读取接口列表
-        moulists = readlist(main_condist)
-        #计算语言数量
-        num[0] = len(moulists)
+        moulists = readlist(main_condict)
         ext = ''
         text = ''
         href = ''
@@ -394,7 +386,7 @@ def resullt(pluginname, findfilecode):
         filedownload = fileDownload()
         
         if request.method == 'GET':
-                path = main_condist['file_path'][0] + pluginname + '/' + findfilecode + '/result/'
+                path = main_condict['SDFilePath'][0] + pluginname + '/' + findfilecode + '/result/'
                 if os.path.isdir(path):
                         for filet in os.listdir(path):
                                 if os.path.isfile(path + filet):
@@ -409,7 +401,7 @@ def resullt(pluginname, findfilecode):
                                 ext = sefilecode.split('.')[1]
                         except:
                                 pass
-                        ftype = type_find(ext, main_condist)
+                        ftype = type_find(ext, main_condict)
                         if ftype == None and ext == '':
                                 ftype = 'text'
                         #如果文件类型为图片，就构造href，传递给前端显示
@@ -436,12 +428,12 @@ def resullt(pluginname, findfilecode):
         else:
                 findfilecode = request.form.get('id')
                 sefilecode = request.form.get('filecode')
-                temp_path = main_condist['file_path'][0]
+                temp_path = main_condict['SDFilePath'][0]
                 if os.path.isdir(temp_path):
                         for dirs in os.listdir(temp_path):
                                 if os.path.isdir(temp_path + dirs + '/' + findfilecode + '/'):
                                         pluginname = dirs
-                path = main_condist['file_path'][0] + pluginname + '/' + findfilecode + '/result/'
+                path = main_condict['SDFilePath'][0] + pluginname + '/' + findfilecode + '/result/'
                 if os.path.isdir(path):
                         for filet in os.listdir(path):
                                 if os.path.isfile(path + filet):
@@ -469,7 +461,7 @@ def resullt(pluginname, findfilecode):
                                 elif filedownload.find.data:
                                         templist.clear()
                                         file_list.clear()
-                                        path = main_condist['file_path'][0] + pluginname + '/' + findfilecode + '/result/'
+                                        path = main_condict['SDFilePath'][0] + pluginname + '/' + findfilecode + '/result/'
                                         if os.path.isdir(path):
                                                 for filet in os.listdir(path):
                                                         if os.path.isfile(path + filet):
@@ -483,7 +475,7 @@ def resullt(pluginname, findfilecode):
                                         ext = sefilecode.split('.')[1]
                                 except:
                                         pass
-                                ftype = type_find(ext, main_condist)
+                                ftype = type_find(ext, main_condict)
                                 if ftype == None and ext == '':
                                         ftype = 'text'
                                 #如果文件类型为图片，就构造href，传递给前端显示
@@ -508,17 +500,16 @@ def resullt(pluginname, findfilecode):
                                                                 text12 = text, pluginname = pluginname, href = href, ftype = ftype,
                                                                 filecodes = templist, findfilecode = findfilecode)
 
+
+
 #路由--------管理接口页面路由
 @app.route('/manage', methods = ['GET','POST'])
 def manage():
-        num = [0, 0, 0, 0]
         row_flag  = 0
         #读取框架配置参数
-        main_condist = main_con()
+        main_condict = main_con()
         #读取接口列表
-        moulists = readlist(main_condist)
-        #计算语言数量
-        num[0] = len(moulists)
+        moulists = readlist(main_condict)
         mous = dict()
         images = dict()
         containers = dict()
@@ -528,10 +519,10 @@ def manage():
         for image in moulists:
                 for mou in moulists[image]:
                         mous[mou] = {'image' : image, 'edit_flag' : [0, 0]}
-                        mous[mou].update(read_obiect_config(mou, main_condist))
+                        mous[mou].update(read_obiect_config(mou, main_condict))
 
         if request.method == 'GET':
-                return render_template('manage.html',manageform = manageform, mous = mous)
+                return render_template('manage.html',manageform = manageform, mous = mous, manage_select = 'plugin')
         else:
                 sename = request.form.get('txt')
                 sesource = request.form.get('source')
@@ -576,24 +567,24 @@ def manage():
                                         image_delete(sename)
                                         images.pop(sename)
                                 elif manageform.container_add.data:
-                                        con_docker_object = my_docker(sename.split(':')[0], config = main_condist, filecode='--no-filecode', images=True, containers=False )
+                                        con_docker_object = my_docker(sename.split(':')[0], config = main_condict, filecode='--no-filecode', images=True, containers=False )
                                         container_name = sename.split(':')[0] + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))
                                         con_docker_object.container_ceate(container_name)
                         elif manage_select == 'container':
-                                containers = containers_list(main_condist)
+                                containers = containers_list(main_condict)
                                 if manageform.delete.data:
                                         container_delete(sename)
                                         containers.pop(sename)
                         elif manage_select == 'sources':
-                                sources_dict = sources_list(sources, main_condist)
+                                sources_dict = sources_list(sources, main_condict)
                                 if manageform.delete.data:
-                                        sources_delete(sename, main_condist)
+                                        sources_delete(sename, main_condict)
                                         sources_dict.pop(sename)
                                 elif manageform.edit.data:
                                         sources_dict[sename][1] = 1
                                 elif manageform.commit.data:
                                         sources_content = request.form.get('sources-content')
-                                        if sources_modification(sename, sources_content, main_condist) == True:
+                                        if sources_modification(sename, sources_content, main_condict) == True:
                                                 print(sources_content)
                                                 sources_dict[sename][0] = sources_content
                                 elif manageform.cancel.data:
@@ -604,7 +595,7 @@ def manage():
                                         other_data['install_content'] = request.form.get('install-content')
                                         other_data['source_select'] = request.form.get('source-select')
                                         other_data['image_tag'] = request.form.get('image-tag')
-                                        docker_object = my_docker('--no-plugin', config = main_condist, filecode='--no-filecode', images=False, containers=False )
+                                        docker_object = my_docker('--no-plugin', config = main_condict, filecode='--no-filecode', images=False, containers=False )
                                         docker_object.basic_image_build(other_data['basic_image'], 
                                                                                                                 other_data['image_tag'],
                                                                                                                 other_data['source_select'],
@@ -614,10 +605,10 @@ def manage():
                         elif manage_select == 'other_add':
                                 if manageform.commit.data:
                                         sources_name = request.form.get('sources-name')
-                                        if os.path.isdir(main_condist['sources_path'][0]) and not os.path.isdir(main_condist['sources_path'][0] + sources_name):
-                                                os.makedirs(main_condist['sources_path'][0] + sources_name)
+                                        if os.path.isdir(main_condict['sources_path'][0]) and not os.path.isdir(main_condict['sources_path'][0] + sources_name):
+                                                os.makedirs(main_condict['sources_path'][0] + sources_name)
                                         sources_content = request.form.get('sources-content')
-                                        with open(main_condist['sources_path'][0] + sources_name + '/sources.list', 'w+') as f:
+                                        with open(main_condict['sources_path'][0] + sources_name + '/sources.list', 'w+') as f:
                                                 f.write(sources_content)
                 return render_template('manage.html',manageform = manageform, mous = mous,
                                                                 sources = sources, sesource = sesource, manage_select = manage_select, 
@@ -628,15 +619,12 @@ def manage():
 #路由---------帮助页路由
 @app.route('/help', methods = ['GET','POST'])
 def help():
-        num = [0, 0, 0, 0]
         moulists = dict()
-        main_condist = dict()
+        main_condict = dict()
         #读取框架配置参数
-        main_condist = main_con()
+        main_condict = main_con()
         #读取接口列表
-        moulists = readlist(main_condist)
-        #计算语言数量
-        num[0] = len(moulists)
+        moulists = readlist(main_condict)
         if request.method == 'GET':
                 return render_template('help.html')
         else:
@@ -653,7 +641,7 @@ def help():
 #列表接口维护
 # def keeplist():
 #         #moulists.clear()
-#         moulists = readlist(main_condist)
+#         moulists = readlist(main_condict)
 
 
         

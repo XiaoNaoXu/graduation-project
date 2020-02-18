@@ -26,7 +26,7 @@ nav.navbar{
     z-index: 10;
 }
 .left-header-div{
-    width: 200px;
+    width: 16rem;
     font-size: 1.5rem;
 }
 .right-header-div{
@@ -45,3 +45,9 @@ nav.navbar{
     color: #DB6574 !important;
     letter-spacing: 0.1rem;
 }
+
+input { 
+    /* border: none !important; */
+    outline: none !important;
+    -webkit-appearance: none;
+ }

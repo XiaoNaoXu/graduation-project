@@ -41,10 +41,10 @@ def image_add():
     pass
 
 def image_delete(image):
-    main_condist = main_con()
+    main_condict = main_con()
     images = get_images_list()
     for key in images:
         if key == image:
             docker_temp = my_docker('--no-plugin', '--no-config', filecode='--no-filecode', images = False, containers = False)
             docker_temp.image_remove(images[key].id)
-            localfile_delete(image, main_condist['images_path'][0])
+            localfile_delete(image, main_condict['ImagesPath'][0])

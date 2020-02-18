@@ -29,7 +29,7 @@ def clear_none_image(client = docker.from_env()):
                         client.images.remove(image.id)
                         exit_flag = True
                     except Exception as err:
-                        print('err : ', err)
+                        print('clear_none_image : ', err)
                         err = str(err)
                         for container in containers:
                             if container.short_id == err[len(err) - 14: len(err) - 4]:
@@ -82,12 +82,14 @@ def get_containers_list(client = docker.from_env()):
 
 class my_docker:
     #类成员初始化
-    def __init__(self, pluginname = '', config = None, filecode = '', images  = True, containers = True):
+    def __init__(self, pluginname = '', main_config = None, filecode = '', images  = True, containers = True, plugin_config = None):
         self.filecode = filecode                                                                               #文件码
         self.pluginname = pluginname                                                              #接口名称
-        self.config = config                                                                                      #接口配置信息       
+        self.main_config = main_config                                                                                      #接口配置信息       
         self.run_log = list()                                                                                      #执行日志                                               
         self.client = docker.from_env()                                                             #与docker守护进程交互的客户机
+        if plugin_config != None:
+            self.plugin_config = plugin_config
         if images  == True:
             self.image = self.get_client_images()                                                #属于该接口的镜像
         if containers == True:
@@ -148,8 +150,8 @@ class my_docker:
         #创建并返回该镜像
         old_path = os.getcwd()
         try:
-            image = self.client.images.build(path = self.config['moudles_path'][0] + self.pluginname, 
-                                                                                tag = self.pluginname + ':' + self.config['image_tag'][0], nocache = True)
+            image = self.client.images.build(path = self.main_config['MoudlesPath'][0] + self.pluginname, 
+                                                                                tag = self.pluginname + ':' + self.main_config['ImageTag'][0], nocache = True)
         except Exception as err:
             print('image_build: ', err)
             clear_none_image()
@@ -202,7 +204,7 @@ class my_docker:
                 if container.name[0:len(self.pluginname)] == self.pluginname:
                     temp_list.append(container)
         #该接口拥有工作容器数量少于默认数量则创建新容器
-        for ran in range(int(self.config['init_plugin_container_number'][0]) - len(temp_list)):
+        for ran in range(int(self.main_config['InitPluginContainerNumber'][0]) - len(temp_list)):
             container_name = self.pluginname + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))           #新容器名称
             container_t = self.container_ceate(container_name)                      #创建新容器
             if container_t != None:                                                         #创建容器成功
@@ -218,7 +220,7 @@ class my_docker:
             try:
                 con =  self.client.containers.run(self.image, 
                                                                                     name = container_name, 
-                                                                                    command = self.config['container_schema_test'][0], 
+                                                                                    command = self.main_config['ContainerSchemaTest'][0], 
                                                                                     detach=True)
             except Exception as err:
                 print('container_ceate: ', err)
@@ -243,12 +245,12 @@ class my_docker:
         images = self.get_images_lists()
         try:
             self.run_log.append('新镜像名检测中 ... ')
-            images[new_image + ':' + self.config['basic_image_tag'][0]]
+            images[new_image + ':' + self.main_config['BasicImageTag'][0]]
         except Exception as err:
             if new_image == '' or new_image == None:
                 self.run_log.append('新镜像名为空, 建立中止 ... ')
                 return
-            self.run_log.append('新镜像名' + new_image + ':' + self.config['basic_image_tag'][0] + '可使用 ... ')
+            self.run_log.append('新镜像名' + new_image + ':' + self.main_config['BasicImageTag'][0] + '可使用 ... ')
             try:
                 self.run_log.append('基础镜像检测中 ... ')
                 images[basic_image]
@@ -260,21 +262,21 @@ class my_docker:
         else:
             self.run_log.append('新镜像名已被使用 ... ')
             return
-        if not os.path.isdir(self.config['images_path'][0] + new_image):
-            os.makedirs(self.config['images_path'][0] + new_image)
+        if not os.path.isdir(self.main_config['ImagesPath'][0] + new_image):
+            os.makedirs(self.main_config['ImagesPath'][0] + new_image)
         try:
-            shutil.copyfile(self.config['sources_path'][0] + sources + '/sources.list', self.config['images_path'][0] + new_image + '/sources.list')
+            shutil.copyfile(self.main_config['SourcesPath'][0] + sources + '/sources.list', self.main_config['ImagesPath'][0] + new_image + '/sources.list')
         except Exception as err:
             self.run_log.append('软件源复制失败:  '+ str(err))
             return
         else:
             self.run_log.append('软件源复制成功... ')
-        with open(self.config['images_path'][0] + new_image + '/Dockerfile', 'w+') as f:
+        with open(self.main_config['ImagesPath'][0] + new_image + '/Dockerfile', 'w+') as f:
             f.truncate()
-            f.write(dockerfile_built_only_image(self.config, new_image, basic_image, install_content, sources))
+            f.write(dockerfile_built_only_image(self.main_config, new_image, basic_image, install_content, sources))
         self.run_log.append('开始构建新镜像 ... ')
         try:
-            self.client.images.build(path = self.config['images_path'][0] + new_image, tag =new_image + ':' + self.config['basic_image_tag'][0] , nocache = True)
+            self.client.images.build(path = self.main_config['ImagesPath'][0] + new_image, tag =new_image + ':' + self.main_config['BasicImageTag'][0] , nocache = True)
         except Exception as err:
             print(err)
             self.clear_test_container()
@@ -289,10 +291,13 @@ class my_docker:
     def containers_start(self):
         t_container = None
         for container in self.containers:
+            container.reload()
             if container.status == 'exited':
                 t_container = container
+                break
             elif container.status == 'paused':
                 t_container = container
+                break
         if t_container == None:
             container_name =  self.pluginname + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))           #新容器名称
             t_container = self.container_ceate(container_name)
@@ -305,11 +310,11 @@ class my_docker:
         self.container_exec_run(t_container)
 
     def container_put_archive(self, container):
-        container.exec_run('mkdir data', workdir = '/home/plugin/')
-        container.exec_run('mkdir result', workdir = '/home/plugin/')
-        tar_file(self.config['container_tar_name'][0], self.filecode, self.pluginname)
-        s_path = self.config['file_path'][0] + self.pluginname + '/' + self.filecode + '/' + self.config['container_tar_name'][0]
-        d_path = self.config['container_src_path'][0]
+        container.exec_run('mkdir data', workdir = self.plugin_config['pluginrootpath'][0])
+        container.exec_run('mkdir result', workdir = self.plugin_config['pluginrootpath'][0])
+        tar_file(self.main_config['ContainerTarName'][0], self.filecode, self.pluginname)
+        s_path = self.main_config['SDFilePath'][0] + self.pluginname + '/' + self.filecode + '/' + self.main_config['ContainerTarName'][0]
+        d_path = self.main_config['ContainerSrcPath'][0]
         with open(s_path, 'rb') as f:
             datas = f.read()
             container.put_archive(d_path, datas)
@@ -317,9 +322,9 @@ class my_docker:
             os.remove(s_path)
 
     def container_get_archive(self, container):
-        path = self.config['file_path'][0]+ self.pluginname + '/' + self.filecode + '/result/'
-        s_path = self.config['container_rel_path'][0]
-        d_path = path+ self.config['container_rtar_name'][0]
+        path = self.main_config['SDFilePath'][0]+ self.pluginname + '/' + self.filecode + '/result/'
+        s_path = self.main_config['ContainerRelPath'][0]
+        d_path = path+ self.main_config['ContainerRTarName'][0]
         if not os.path.isdir(path):
             os.makedirs(path)
         with open(d_path, 'wb') as f:
@@ -327,7 +332,7 @@ class my_docker:
             for bit in bits:
                 f.write(bit)
         if os.path.isfile(d_path):
-            un_tar(d_path, self.config['file_path'][0]+ self.pluginname + '/' + self.filecode)
+            un_tar(d_path, self.main_config['SDFilePath'][0]+ self.pluginname + '/' + self.filecode)
             os.remove(d_path)
 
     #移除容器
@@ -339,11 +344,11 @@ class my_docker:
     def container_exec_run(self,  container):
         self.container_put_archive(container)
         try:
-            container.exec_run('python3.7 /home/plugin/main.py', workdir = '/home/plugin/', detach = True)
+            container.exec_run(self.plugin_config['runcommand'][0], workdir = self.plugin_config['pluginrootpath'][0], detach = True)
         except Exception as err:
             print('container_ceate: ', err)
         else:
             self.container_get_archive(container)
-            container.exec_run('rm -rf data/', workdir = '/home/plugin/')
-            container.exec_run('rm -rf result/', workdir = '/home/plugin/')
+            container.exec_run('rm -rf data/', workdir = self.plugin_config['pluginrootpath'][0])
+            container.exec_run('rm -rf result/', workdir = self.plugin_config['pluginrootpath'][0])
             self.containers_pause(container)

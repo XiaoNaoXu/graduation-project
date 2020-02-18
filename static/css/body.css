@@ -64,11 +64,11 @@ nav#sidebar .avatar {
     border: 3px solid #282b2f;
 }
 nav#sidebar span.heading {
-    padding-top: 10px;
+    padding-top: 20px;
     font-weight: 700;
     margin-left: 20px;
     color: #494d53;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: 15px;
 }
 nav#sidebar li {
@@ -78,7 +78,7 @@ nav#sidebar li a {
     padding: 18px 20px;
     display: block;
     font-weight: 400;
-    padding-left: 30px;
+    padding-left: 60px;
 }
 .d-flex {
     display: -ms-flexbox!important;
@@ -97,14 +97,10 @@ nav#sidebar li.active::before {
 }
 nav#sidebar li::before {
     content: '';
-    width: 3px;
+    width: 4px;
     height: 100%;
-    background: none;
     display: block;
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 99;
 }
 
 li.active > a {
@@ -114,7 +110,7 @@ li.active > a {
 
 
 .page-header {
-    padding: 20px 15px;
+    padding-bottom: 0;
     background: #2d3035;
     color: #8a8d93;
     margin-bottom: 30px;
@@ -165,6 +161,54 @@ section .no-padding{
 
 *, ::after, ::before {
     box-sizing: border-box;
+}
+/* input,button,a {
+    outline:0 none !important;
+} 
+input[type=button]:focus,
+input[type=submit]:focus,
+button:focus {
+  outline: none;
+}
+ 
+button::-moz-focus-inner,
+input[type=button]::-moz-focus-inner {
+  outline: none;
+} */
+/* input[type=button],input[type=submit]{
+    background-color: #494d53;
+    color: #8a8d93;
+    font-size: 0.8rem;
+    border: 0;
+    width: 5rem;
+    height: 2rem;
+} */
+input[type='submit'], button{
+    cursor: pointer;
+}
+.oo-mean{
+    padding-left: 2rem ;width: 8rem;height: 3.5rem;line-height:3.5rem
+}
+
+.se-second-meau{
+    background-color: #34373d;
+    color: #bfc1c4;
+    font-size: 1rem;
+    border: 0;
+    width: 8rem;
+    height: 3.5rem;
+    border-bottom: 2.2px solid #DB6574;
+}
+
+
+.second-meau{
+    background-color: #2d3035;
+    color: #8a8d93;
+    font-size: 1rem;
+    border: 0;
+    width: 8rem;
+    height: 3.5rem;
+    border-bottom: 2.2px;
 }
 
 
@@ -275,9 +319,20 @@ section .no-padding{
 .row5{
     border-bottom: 1px solid #34373d;
     height: 10rem; 
+    display: flex;
 }
 .row5 .col1{
+    width: 30;
     height: 8rem; 
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.row5 .col2{
+    width: 30;
+    line-height: 2rem;
+    height: 2rem; 
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: 1rem;

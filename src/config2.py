@@ -23,25 +23,24 @@ def sources_type(filepath):
         else:
             return 'replace'
 
-def dockerfile_built_only_image(main_condist, new_image, image, dependon_install, sources):
+def dockerfile_built_only_image(main_condict, new_image, image, dependon_install, sources):
         temp_str = ''
-        temp_str2 = 'FROM ' + image + '\nCOPY * ' + main_condist['container_moudel_path'][0]
-        if sources_type(main_condist['sources_path'][0] + sources + '/sources.list') == 'deb':
-                with open(main_condist['moudles_path'][0] + new_image + '/sources.list', mode='w+') as f:
-                        with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
+        temp_str2 = 'FROM ' + image + '\nCOPY * ' + main_condict['ContainerMoudelPath'][0]
+        if sources_type(main_condict['SourcesPath'][0] + sources + '/sources.list') == 'deb':
+                with open(main_condict['MoudlesPath'][0] + new_image + '/sources.list', mode='w+') as f:
+                        with open(main_condict['SourcesPath'][0] + sources + '/sources.list', mode='r+') as f2:
                                 f.write(f2.read())
-                temp_str2 += '\nCOPY sources.list /etc/apt/' + '\nCOPY * ' + main_condist['container_moudel_path'][0] + '\nRUN apt-get update \ ' \
-                                        + '\n && mkdir -p /home/plugin/data \ ' + '\n && mkdir -p /home/plugin/result '                               
+                temp_str2 += '\nCOPY sources.list /etc/apt/' + '\nCOPY * ' + main_condict['ContainerMoudelPath'][0] + '\nRUN apt-get update  '                   
         else:
-                sel_sources = sources.split('-')[0] + '_sources_replace'
-                with open(main_condist['sources_path'][0] + sources + '/sources.list', mode='r+') as f2:
+                sel_sources = sources.split('-')[0] + 'SourcesReplace'
+                with open(main_condict['SourcesPath'][0] + sources + '/sources.list', mode='r+') as f2:
                         rep_content = f2.read().strip()
-                        for length in range(len(main_condist[sel_sources])):
+                        for length in range(len(main_condict[sel_sources])):
                                 if length == 0:
-                                        temp_str2 += '\nRUN sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+                                        temp_str2 += '\nRUN sed -i "s/' + main_condict[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
                                 else:
-                                        temp_str2 += '\n\t&& sed -i "s/' + main_condist[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
-                        temp_str2 += '\n\t&& apt-get update \ ' + '\n\t&& mkdir -p /home/plugin/data \ ' + '\n\t&& mkdir -p /home/plugin/result '
+                                        temp_str2 += '\n\t&& sed -i "s/' + main_condict[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
+                        temp_str2 += '\n\t&& apt-get update \ '
                 if dependon_install != ''  and dependon_install != None:
                         temp_str = '\nRUN '
                         dependon_install = dependon_install.split('\r\n')
