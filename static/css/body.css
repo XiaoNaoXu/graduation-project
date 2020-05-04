@@ -319,7 +319,6 @@ input[type='submit'], button{
 .row5{
     border-bottom: 1px solid #34373d;
     height: 10rem; 
-    display: flex;
 }
 .row5 .col1{
     width: 30;

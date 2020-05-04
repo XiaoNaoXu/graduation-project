@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="../static/css/body.css">
     <link rel="stylesheet" href="../static/css/header.css" >
     <script type="text/javascript" src="../static/js/position.js"></script>
+    <script>
+        function test(){
+            var t = document.getElementById('tt');
+            t.innerHTML = "<div style='width:1000px; height:1000px; background-color:white'>11111111111 \
+                {{temp}} \
+            </div> ";
+            return false;
+        }
+    </script>
 </head>
 
 <body>
@@ -82,8 +91,12 @@
         <section>
             <form action="" method="POST">
                     <div id='test1' style="height: 5rem; background: #34373d;">
-                            帮助页还没做呢！
-                        </div>
+                        帮助页还没做呢！
+                    </div>
+                    <div id="tt">
+
+                    </div>
+                    <button onclick=" return test();">提交</button>
             </form>
         </section>
         

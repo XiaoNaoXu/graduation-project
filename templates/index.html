@@ -98,9 +98,9 @@
                                                         <select class="index-select" name="language"  onchange="javascript:this.form.submit();"> 
                                                             {%  for di in languages %}
                                                                 {% if selanguage == di %}
-                                                                    <option value={{di}} selected>{{di}}</option>
+                                                                    <option value='{{di}}' selected>{{di}}</option>
                                                                 {% else %}
-                                                                    <option value={{di}}>{{di}}</option>
+                                                                    <option value='{{di}}'>{{di}}</option>
                                                                 {% endif %}
                                                             {% endfor %}
                                                         </select>
@@ -120,9 +120,9 @@
                                                         <select class="index-select"  name="plugin"  onchange="javascript:this.form.submit();"> 
                                                             {%  for di in plugins %}
                                                                 {% if seplugin == di %}
-                                                                    <option value={{di}} selected>{{di}}</option>
+                                                                    <option value='{{di}}' selected>{{di}}</option>
                                                                 {% else %}
-                                                                    <option value={{di}}>{{di}}</option>
+                                                                    <option value='{{di}}'>{{di}}</option>
                                                                 {% endif %}
                                                             {% endfor %}
                                                         </select class="index-select">
@@ -142,9 +142,9 @@
                                                         <select class="index-select"  name="intype" onchange="javascript:this.form.submit();"> 
                                                                 {%  for di in intypes %}
                                                                 {% if seintype == di %}
-                                                                    <option value={{di}} selected>{{di}}</option>
+                                                                    <option value='{{di}}' selected>{{di}}</option>
                                                                 {% else %}
-                                                                    <option value={{di}}>{{di}}</option>
+                                                                    <option value='{{di}}'>{{di}}</option>
                                                                 {% endif %}
                                                             {% endfor %}
                                                         </select>
@@ -178,9 +178,9 @@
                                             <select name="filename" style="width: 10rem;" onchange="javascript:this.form.submit();"> 
                                                     {%  for filename in filenames %}
                                                     {% if sefilename == filename %}
-                                                        <option value={{filename}} selected>{{filename}}</option>
+                                                        <option value='{{filename}}' selected>{{filename}}</option>
                                                     {% else %}
-                                                        <option value={{filename}}>{{filename}}</option>
+                                                        <option value='{{filename}}'>{{filename}}</option>
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
@@ -194,11 +194,11 @@
                             <div class="tblock">
                                 <div class=".text">
                                     <div class="textarea-t">
-                                        <input readonly type="hidden" id="filecode" name="filecode" style="height: 0; width: 0;" value={{filecode}}>
+                                        <input readonly type="hidden" id="filecode" name="filecode" style="height: 0; width: 0;" value='{{filecode}}'>
                                         {% if ftype == 'text' or ftype == None %}
-                                        <textarea placeholder='请输入或导入数据' class="textarea-st" name='textarea' >{{text}}</textarea><br>
+                                            <textarea placeholder='请输入或导入数据' class="textarea-st" name='textarea' >{{text}}</textarea><br>
                                         {% elif ftype == 'images' %}
-                                        <img src={{href}} alt="" style='width: auto; height: auto;  max-width: 100%;  max-height: 100%; '>
+                                            <img src='{{href}}' alt="" style='width: auto; height: auto;  max-width: 100%;  max-height: 100%; '>
                                         {% endif %}
                                     </div>
                                 </div>

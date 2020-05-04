@@ -344,7 +344,9 @@ class my_docker:
     def container_exec_run(self,  container):
         self.container_put_archive(container)
         try:
-            container.exec_run(self.plugin_config['runcommand'][0], workdir = self.plugin_config['pluginrootpath'][0], detach = True)
+            print(container.exec_run(self.plugin_config['runcommand'][0], workdir = self.plugin_config['pluginrootpath'][0], demux = True))
+            if self.pluginname == 'tedt1':
+                input()
         except Exception as err:
             print('container_ceate: ', err)
         else:
