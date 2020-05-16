@@ -1,6 +1,6 @@
 import os
 import shutil
-from subprocess import check_call
+from subprocess import check_call, check_output
 from src.mydocker import my_docker
 from src.con import main_con, readlist, dockerfile_built, localfile_delete, list_clear, read_obiect_config
 from src.config2 import un_7z, un_bz2, un_gz, un_rar, un_tar, un_zip
@@ -18,11 +18,14 @@ def plugin_delete(plugin, moulists):
 def plugin_update(plugin, configs):
     pass
 
-def update_in_github(main_condict, pluginname):
-    config = read_obiect_config(pluginname, main_condict)
-    print(config)
-    update_project_url = ""
-    check_call(update_project_url, shell = True)
+def update_in_github(main_condict, pluginname, config):
+    update_project_url = 'git -C ' + main_condict['MoudlesPath'][0] + pluginname + '/ pull ' + config['gitprojecturl'][0] + ' ' 
+    result = check_output(update_project_url, shell = True)
+    if result.decode() == '已经是最新的。\n'    :
+        docker = my_docker(pluginname = pluginname, main_config=main_condict, images=True, containers=False)
+        docker.image_name_to_old()
+        docker.reload()
+        docker.image = docker.get_client_images()
 
 def plugin_add(main_condict, pluginname, image, inputfilename, inputtype, 
                                 dependon_install, detail, sources, files, runcommand):

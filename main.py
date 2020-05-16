@@ -124,7 +124,7 @@ def index():
                     if text != '':
                         temppath = main_condict['SDFilePath'][0] + plugin + '/' + filecode + '/'
                         # plat = Platform(plugin, temppath)
-                        docker = my_docker(plugin, main_condict, filecode, plugin_config = con_temp)
+                        docker = my_docker(plugin, main_config = main_condict,filecode = filecode, plugin_config = con_temp)
                         docker.containers_start()
                         return redirect(url_for('resullt', pluginname = plugin, findfilecode = filecode))
             
@@ -574,7 +574,8 @@ def manage():
                     mous[sename]['edit_flag'][0] = mous[sename]['edit_flag'][1]
                 elif manageform.cancel.data:
                     mous[sename]['edit_flag'][0] = mous[sename]['edit_flag'][1]
-                    update_in_github(main_condict, sename)
+                elif manageform.update.data:
+                    update_in_github(main_condict, sename, mous[sename])
             elif manage_select == 'image':
                 images_t = sorted(image_list().items(), key = lambda x:x[0])
                 for image in images_t:
@@ -584,7 +585,7 @@ def manage():
                     image_delete(sename)
                     images.pop(sename)
                 elif manageform.container_add.data:
-                    con_docker_object = my_docker(sename.split(':')[0], config = main_condict, filecode='--no-filecode', images=True, containers=False )
+                    con_docker_object = my_docker(sename.split(':')[0], main_config = main_condict, filecode='--no-filecode', images=True, containers=False )
                     container_name = sename.split(':')[0] + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))
                     con_docker_object.container_ceate(container_name)
             elif manage_select == 'container':
@@ -612,7 +613,7 @@ def manage():
                     other_data['install_content'] = request.form.get('install-content')
                     other_data['source_select'] = request.form.get('source-select')
                     other_data['image_tag'] = request.form.get('image-tag')
-                    docker_object = my_docker('--no-plugin', config = main_condict, filecode='--no-filecode', images=False, containers=False )
+                    docker_object = my_docker('--no-plugin', main_config = main_condict, filecode='--no-filecode', images=False, containers=False )
                     docker_object.basic_image_build(other_data['basic_image'], 
 																							other_data['image_tag'],
 																							other_data['source_select'],

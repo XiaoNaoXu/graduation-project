@@ -313,7 +313,12 @@
                                             <textarea readonly name={{mou + '_detail' }}  class="text-detail" id="detail" >{{ ''.join(mous[mou]['detail']) }}</textarea>
                                         </td>
                                         <td class="object-edit">{{ manageform.edit(onclick="c1();") }}</td>
-                                        <td class="object-delete">{{ manageform.delete(onclick="c1();") }}</td>
+                                        <td class="object-delete">
+                                            {{ manageform.delete(onclick="c1();") }}
+                                            {% if mous[mou]['registertype'][0] == 'github' %}
+                                                {{ manageform.update(onclick="c1();") }}
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                 {% else %}
                                     <tr class="object">
@@ -338,7 +343,12 @@
                                             <textarea name={{mou + '_detail' }} class="text-detail-selected"  name="detail" id="detail">{{ ''.join(mous[mou]['detail']) }}</textarea>
                                         </td>
                                         <td class="object-edit">{{ manageform.cancel(onclick="c1();") }} {{ manageform.commit(onclick="c1();") }}</td>
-                                        <td class="object-delete">{{ manageform.delete(onclick="c1();") }}</td>
+                                        <td class="object-delete">
+                                            {{ manageform.delete(onclick="c1();") }}
+                                            {% if mous[mou]['registertype'][0] == 'github' %}
+                                                {{ manageform.update(onclick="c1();") }}
+                                            {% endif %}
+                                        </td>.delete(onclick="c1();") }}</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}

@@ -172,9 +172,20 @@ class my_docker:
             except Exception as err:
                 err = str(err)
                 for container in containers:
-                    if container.short_id == err[len(err) - 14: len(err) - 4]:
+                    if container.short_id in err and container.status != 'running':
                         container.remove(v = True, force = True)
                         break
+    
+    def reload(self):
+        self.client = docker.from_env()
+        self.image = self.get_client_images() 
+
+    def image_name_to_old(self):
+        self.image.tag(self.image.attrs['RepoTags'][0] + '.old')
+        self.client.images.remove(self.image.attrs['RepoTags'][0])
+    
+    def create_new_image(self):
+        pass
 
     def clear_test_container(self):
         containers = getAll_containers_list()

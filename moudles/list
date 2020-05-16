@@ -1,8 +1,4 @@
+
+
 [python3.7:basic]
-    test31
-    tedt1
-    tedt2
-    tedt3
-    tedt5
-[python:3.7]
-    tedt4
+    test1

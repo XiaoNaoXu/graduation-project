@@ -106,6 +106,7 @@ class manageForm(FlaskForm):
     delete = simple.SubmitField('删除')
     cancel = simple.SubmitField('取消')
     commit = simple.SubmitField('提交')
+    update = simple.SubmitField('从Github更新')
     container_add = simple.SubmitField('增加容器')
 
     plugin = simple.SubmitField('接口管理')
