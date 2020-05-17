@@ -12,6 +12,7 @@ def pimageid_to_pimagename(images, parent_imageId):
                 
 
 def image_list():
+    main_condict = main_con()
     images_list = dict()
     images = get_images_list()
     for image in images:
@@ -28,7 +29,8 @@ def image_list():
         except:
             images_list[name]['Labels'] = None
         images_list[name]['User'] = image.attrs['Config']['User']
-        if name[len(name) - 6:len(name)] == 'plugin':
+
+        if main_condict['ImageTag'][0] in name.split(':')[1]:
             images_list[name]['imagetype'] = '衍生镜像'
         else:
             images_list[name]['imagetype'] = '基础镜像'

@@ -23,6 +23,7 @@ def clear_none_image(client = docker.from_env()):
         for image in images:
             if image.attrs['RepoTags'] == []:
                 exit_flag = False
+                print(image.attrs)
                 while exit_flag == False:
                     try:
                         containers = client.containers.list(all = True)
@@ -138,7 +139,12 @@ class my_docker:
         else:
             for image in images:
                 if image.attrs['RepoTags'] != [] and image.attrs['RepoTags'][0].split(':')[0] == self.pluginname:
-                    return image
+                    if image.attrs['RepoTags'][0].split(':')[1] == self.main_config['ImageTag'][0]:
+                        return image
+                    elif image.attrs['RepoTags'][0].split(':')[1] == self.main_config['ImageTag'][0] + '.old':
+                        return image
+                    elif image.attrs['RepoTags'][0].split(':')[1] == self.main_config['ImageTag'][0]:
+                        return image
                 elif image.attrs['RepoTags'] == []:
                     self.image_remove(image.id)
             #该接口没有镜像创建新镜像
@@ -148,10 +154,10 @@ class my_docker:
     #创建镜像
     def image_build(self):
         #创建并返回该镜像
-        old_path = os.getcwd()
         try:
             image = self.client.images.build(path = self.main_config['MoudlesPath'][0] + self.pluginname, 
-                                                                                tag = self.pluginname + ':' + self.main_config['ImageTag'][0], nocache = True)
+                                            tag = self.pluginname + ':' + self.main_config['ImageTag'][0], 
+                                            nocache = True)
         except Exception as err:
             print('image_build: ', err)
             clear_none_image()
@@ -176,9 +182,13 @@ class my_docker:
                         container.remove(v = True, force = True)
                         break
     
-    def reload(self):
-        self.client = docker.from_env()
-        self.image = self.get_client_images() 
+    def reload(self, client = True, image = True, container = True):
+        if client == True:
+            self.client = docker.from_env()
+        if image == True:
+            self.image = self.get_client_images()
+        if container == True:
+            self.containers = self.get_client_containers()
 
     def image_name_to_old(self):
         self.image.tag(self.image.attrs['RepoTags'][0] + '.old')
@@ -212,7 +222,7 @@ class my_docker:
             pass
         else:
             for container in containers:
-                if container.name[0:len(self.pluginname)] == self.pluginname:
+                if container.name[0:len(self.pluginname)] == self.pluginname and container.attrs['Image'][7:17] == self.image.short_id.split(':')[1] :
                     temp_list.append(container)
         #该接口拥有工作容器数量少于默认数量则创建新容器
         for ran in range(int(self.main_config['InitPluginContainerNumber'][0]) - len(temp_list)):
@@ -230,9 +240,9 @@ class my_docker:
         if self.image != None:
             try:
                 con =  self.client.containers.run(self.image, 
-                                                                                    name = container_name, 
-                                                                                    command = self.main_config['ContainerSchemaTest'][0], 
-                                                                                    detach=True)
+                                                name = container_name, 
+                                                command = self.main_config['ContainerSchemaTest'][0], 
+                                                detach=True)
             except Exception as err:
                 print('container_ceate: ', err)
                 return None

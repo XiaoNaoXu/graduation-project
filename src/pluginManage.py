@@ -24,8 +24,9 @@ def update_in_github(main_condict, pluginname, config):
     if result.decode() == '已经是最新的。\n'    :
         docker = my_docker(pluginname = pluginname, main_config=main_condict, images=True, containers=False)
         docker.image_name_to_old()
-        docker.reload()
-        docker.image = docker.get_client_images()
+        docker.image = docker.image_build()
+        docker.reload(client=False, image=False)
+        docker.image_remove(pluginname + ':' + main_condict['ImageTag'][0] + '.old')
 
 def plugin_add(main_condict, pluginname, image, inputfilename, inputtype, 
                                 dependon_install, detail, sources, files, runcommand):
