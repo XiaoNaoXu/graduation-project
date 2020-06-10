@@ -23,7 +23,6 @@ def clear_none_image(client = docker.from_env()):
         for image in images:
             if image.attrs['RepoTags'] == []:
                 exit_flag = False
-                print(image.attrs)
                 while exit_flag == False:
                     try:
                         containers = client.containers.list(all = True)
@@ -323,11 +322,11 @@ class my_docker:
             container_name =  self.pluginname + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))           #新容器名称
             t_container = self.container_ceate(container_name)
             self.containers.append(t_container)
+        t_container.reload()
         if t_container.status == 'exited':
             t_container.start()
         elif t_container.status == 'paused':
             t_container.unpause()
-        t_container.reload()
         self.container_exec_run(t_container)
 
     def container_put_archive(self, container):
@@ -365,9 +364,7 @@ class my_docker:
     def container_exec_run(self,  container):
         self.container_put_archive(container)
         try:
-            print(container.exec_run(self.plugin_config['runcommand'][0], workdir = self.plugin_config['pluginrootpath'][0], demux = True))
-            if self.pluginname == 'tedt1':
-                input()
+            container.exec_run(self.plugin_config['runcommand'][0], workdir = self.plugin_config['pluginrootpath'][0], demux = True)
         except Exception as err:
             print('container_ceate: ', err)
         else:

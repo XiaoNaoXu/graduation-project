@@ -160,10 +160,10 @@
                                     <td class="object-image-size">{{ images[image]['Size'] }}(Byte)</td>
                                     <td class="object-image-created">{{ images[image]['Created'] }}</td>
                                     <td class="object-image-delete">
+                                        {{ manageform.delete(onclick="c1();") }}
+                                        {{ manageform.backup(onclick="c1();") }}
                                         {% if images[image]['imagetype'] == '衍生镜像' %}
-                                            {{ manageform.delete(onclick="c1();") }}{{ manageform.container_add(onclick="c1();") }}
-                                        {% else %}
-                                            {{ manageform.delete(onclick="c1();") }}
+                                            {{ manageform.container_add(onclick="c1();") }}                                            
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -306,7 +306,7 @@
                                 {% if mous[mou]['edit_flag'][0] == mous[mou]['edit_flag'][1] %}
                                     <tr class="object" >
                                         <td class="object-name">{{ mou }}</td>
-                                        <td class="object-image">{{ mous[mou]['image'] }}</td>
+                                        <td class="object-image">{{ mous[mou]['image'][0] }}</td>
                                         <td class="object-filename">{{ mous[mou]['inputfilename'][0] }}</td>
                                         <td class="object-sources">{{ mous[mou]['sources'][0] }}</td>
                                         <td class="object-detail">
@@ -323,7 +323,7 @@
                                 {% else %}
                                     <tr class="object">
                                         <td class="object-name">{{ mou }}</td>
-                                        <td class="object-image">{{ mous[mou]['image'] }}</td>
+                                        <td class="object-image">{{ mous[mou]['image'][0] }}</td>
                                         <td class="object-filename">
                                             <input class="input-inputfilename" type="text" value={{mous[mou]['inputfilename'][0]}}>
                                         </td>
@@ -348,7 +348,7 @@
                                             {% if mous[mou]['registertype'][0] == 'github' %}
                                                 {{ manageform.update(onclick="c1();") }}
                                             {% endif %}
-                                        </td>.delete(onclick="c1();") }}</td>
+                                        </td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}

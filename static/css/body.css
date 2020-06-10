@@ -227,7 +227,7 @@ input[type='submit'], button{
     border:0;
     border-radius:1px;
     background-color: #d9dbdf;
-    width:70rem;height: 505px;
+    width:70rem;height: 750px;
     padding: 3px;resize: none;
     outline: none; 
     resize: none;
@@ -265,7 +265,7 @@ input[type='submit'], button{
 
 .row1{
     border-bottom: 1px solid #34373d;
-    height: 6rem; 
+    height: 8rem; 
     display: flex;
 }
 .row1 .col1{
@@ -273,7 +273,7 @@ input[type='submit'], button{
     width: 35rem;
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 1.5rem;
+    padding-top: 3rem;
     padding-bottom: 1.5rem;
 }
 .row2{
@@ -282,10 +282,11 @@ input[type='submit'], button{
     height: 8rem; 
 }
 .row2 .col1{
+    width: 35rem;
     height: 6rem; 
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 1rem;
+    padding-top: 2rem;
     padding-bottom: 1rem;
 }
 .row3{
@@ -294,6 +295,7 @@ input[type='submit'], button{
     height: 8rem; 
 }
 .row3 .col1{
+    width: 35rem;
     height: 6rem; 
     padding-left: 1rem;
     padding-right: 1rem;
@@ -303,25 +305,29 @@ input[type='submit'], button{
 .row4{
     display: flex;
     border-bottom: 1px solid #34373d;
-    height: 10rem; 
+    height: 13rem; 
 }
-.row4 .col2{    
-    padding-right: 1rem;
-    padding-top: 2rem;
+.row4 .col2{ 
+    width: 35rem;   
+    padding: 1rem;
+    position: inherit;
+    padding-top: 6rem;
+    padding-bottom: 2rem;
 }
 .row4 .col1{
+    width: 35rem;
     height: 8rem; 
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 .row5{
     border-bottom: 1px solid #34373d;
-    height: 10rem; 
+    height: 11rem; 
 }
 .row5 .col1{
-    width: 30;
+    width: 35rem;
     height: 8rem; 
     padding-left: 1rem;
     padding-right: 1rem;
@@ -329,21 +335,20 @@ input[type='submit'], button{
     padding-bottom: 1rem;
 }
 .row5 .col2{
-    width: 30;
+    width: 35rem;
     line-height: 2rem;
     height: 2rem; 
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
 }
 
 .row6{
     border-bottom: 1px solid #34373d;
     display: flex;
-    height: 8rem; 
+    height: 10rem; 
 }
 .row6 .col1{
+    width: 35rem;
     height: 3rem; 
     padding-left: 1rem;
     padding-right: 1rem;
@@ -360,13 +365,22 @@ input[type='submit'], button{
 
 
 .text-control{
-    width: 45rem;
-    height: 5rem;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 540;
+    width: 35rem;
+    resize:none;
+    height: 8rem;
+    background-color: #d9dbdf;
 }
 
 .text-detail{
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
     width: 30rem;
-    height: 5rem;
+    height: 6rem;
+    resize:none;
+    background-color: #d9dbdf;
 }
 
 .no-name{
@@ -378,4 +392,32 @@ input[type='submit'], button{
     width: 90rem;
     height: 10rem;
     background: #22242A;
+}
+
+.addplug-language{
+    font-size: 16px;
+    width: 20rem;
+    height: 1.5rem;
+    background-color: #d9dbdf;
+}
+.addplug-image{
+    font-size: 16px;
+    width: 20rem;
+    height: 1.5rem;
+    background-color: #d9dbdf;
+}
+.addplug-commit{
+    width: 8rem;
+    height: 3rem;
+    background-color: #30e4b7;
+    color: white;
+    font-size: 22px;
+    font-weight: 800;
+    border-radius: 3rem;
+    border: none;
+}
+.addplug-files{
+    height: 3rem;
+    width: 16rem;
+    font-size: 15px;
 }

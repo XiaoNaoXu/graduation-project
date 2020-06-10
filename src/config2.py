@@ -40,17 +40,21 @@ def un_7z(file_name, file_path):
 
 def sources_type(filepath):
     with open(filepath, 'r') as f:
-        src_content = f.read().strip()
-        if src_content == 'deb':
-            return 'deb'
-        else:
-            return 'replace'
+        src_content = f.readlines()
+        for src in src_content:
+            if src != '' and src != None:
+                print(src.strip().split(' ')[0])
+                if src.strip().split(' ')[0] == 'deb':
+                    return 'deb'
+                else:
+                    return 'replace'
+        
 
 def dockerfile_built_only_image(main_condict, new_image, image, dependon_install, sources):
     temp_str = ''
     temp_str2 = 'FROM ' + image + '\nCOPY * ' + main_condict['ContainerMoudelPath'][0]
     if sources_type(main_condict['SourcesPath'][0] + sources + '/sources.list') == 'deb':
-        with open(main_condict['MoudlesPath'][0] + new_image + '/sources.list', mode='w+') as f:
+        with open(main_condict['ImagesPath'][0] + new_image + '/sources.list', mode='w+') as f:
             with open(main_condict['SourcesPath'][0] + sources + '/sources.list', mode='r+') as f2:
                 f.write(f2.read())
         temp_str2 += '\nCOPY sources.list /etc/apt/' + '\nCOPY * ' + main_condict['ContainerMoudelPath'][0] + '\nRUN apt-get update  '           
@@ -63,7 +67,7 @@ def dockerfile_built_only_image(main_condict, new_image, image, dependon_install
                     temp_str2 += '\nRUN sed -i "s/' + main_condict[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
                 else:
                     temp_str2 += '\n\t&& sed -i "s/' + main_condict[sel_sources][length].strip() +'/' + rep_content + '/g" /etc/apt/sources.list \ ' 
-            temp_str2 += '\n\t&& apt-get update \ '
+            temp_str2 += '\n\t&& apt-get update '
         if dependon_install != ''  and dependon_install != None:
             temp_str = '\nRUN '
             dependon_install = dependon_install.split('\r\n')

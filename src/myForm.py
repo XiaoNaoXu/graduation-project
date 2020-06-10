@@ -23,7 +23,7 @@ class addForm(FlaskForm):
         choices = language_choices(),
     )
     pluginname = simple.StringField(
-        label= '接口名称:',
+        label= '接口名称: ',
         widget=widgets.TextInput(),
         # validators=[DataRequired(message='接口名称不能为空'), 
         #                         NoneOf(['t1', 't2', 't10', '3'], message='wuxiao', values_formatter = 'caonima')]
@@ -33,7 +33,7 @@ class addForm(FlaskForm):
         # }
     )
     inputfilename = simple.StringField(
-        label = '输入文件名：',
+        label = '输入文件名： ',
         widget=widgets.TextInput(),
         # validators=[DataRequired()]
     )
@@ -105,8 +105,9 @@ class manageForm(FlaskForm):
     edit = simple.SubmitField('编辑')
     delete = simple.SubmitField('删除')
     cancel = simple.SubmitField('取消')
-    commit = simple.SubmitField('提交')
+    commit = simple.SubmitField('提 交')
     update = simple.SubmitField('从Github更新')
+    backup = simple.SubmitField('备份')
     container_add = simple.SubmitField('增加容器')
 
     plugin = simple.SubmitField('接口管理')

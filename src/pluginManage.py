@@ -21,7 +21,7 @@ def plugin_update(plugin, configs):
 def update_in_github(main_condict, pluginname, config):
     update_project_url = 'git -C ' + main_condict['MoudlesPath'][0] + pluginname + '/ pull ' + config['gitprojecturl'][0] + ' ' 
     result = check_output(update_project_url, shell = True)
-    if result.decode() == '已经是最新的。\n'    :
+    if result.decode() != '已经是最新的。\n'    :
         docker = my_docker(pluginname = pluginname, main_config=main_condict, images=True, containers=False)
         docker.image_name_to_old()
         docker.image = docker.image_build()

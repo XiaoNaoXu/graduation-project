@@ -117,13 +117,13 @@ function submit11(form){
 function substitute(eletID){
     content = {
         1 : '<label>请选择文件</label>\
-            <input id="pluginfile" multiple="multiple" name="pluginfile" type="file">' ,
+            <input id="pluginfile" multiple="multiple" name="pluginfile" class="addplug-files" type="file">' ,
         2 : '<label>GitHub仓库地址：</label>\
-            <input id="pluginfile" style="width: 20rem" name="pluginfile" type="text">' ,
+            <input id="pluginfile" class="addplug-language" name="pluginfile" type="text">' ,
         3 : '<label>请选择压缩文件</label>\
-            <input id="pluginfile" name="pluginfile" type="file">' ,
+            <input id="pluginfile" name="pluginfile" class="addplug-files" type="file">' ,
         4 : '<label>请选择文件</label>\
-            <input id="pluginfile" multiple="multiple" name="pluginfile" type="file"> '
+            <input id="pluginfile" multiple="multiple" class="addplug-files" name="pluginfile" type="file"> '
     };
     var t = document.getElementById('row5rcol1');
     var selectlabel = document.getElementById('selectlabel');

@@ -55,12 +55,12 @@ def index():
 
     if moulists == {}:
         return render_template('index.html',
-															languages = languages, selanguage = '',
-															plugins = plugins, seplugin = '', 
-															intypes = intypes,  seintype = '',
-															text = text, myform = myform,
-															nums = PluginNum, details = '',
-															ftype = 'text', filecode = 'none')
+                                languages = languages, selanguage = '',
+                                plugins = plugins, seplugin = '', 
+                                intypes = intypes,  seintype = '',
+                                text = text, myform = myform,
+                                nums = PluginNum, details = '',
+                                ftype = 'text', filecode = 'none')
 
     #页面请求为GET
     if request.method == 'GET':
@@ -77,12 +77,12 @@ def index():
         #分别分离接口名称，输入类型，输出名称并计算变量个数----end
         #返回模板
         return render_template('index.html',
-															languages = languages, selanguage = '',
-															plugins = plugins, seplugin = '', 
-															intypes = intypes,  seintype = '',
-															text = text, myform = myform,
-															nums = PluginNum, details = con_temp['detail'],
-															ftype = 'text', filecode = 'none')
+                                languages = languages, selanguage = '',
+                                plugins = plugins, seplugin = '', 
+                                intypes = intypes,  seintype = '',
+                                text = text, myform = myform,
+                                nums = PluginNum, details = con_temp['detail'],
+                                ftype = 'text', filecode = 'none')
     
     #页面请求方式为POST
     else:
@@ -220,13 +220,13 @@ def index():
             #获取文件列表------------------------------------------------------------------------------end
         #返回模板
         return render_template('index.html',
-															languages = languages, selanguage = language,
-															plugins = plugins, seplugin = plugin, 
-															intypes = intypes,  seintype = intype,
-															text = text, myform = myform, filecode = filecode,
-															nums = PluginNum, details = con_temp['detail'], 
-															ftype = ftype, href = href,
-															filenames = filenames, sefilename = sefilename)
+                                languages = languages, selanguage = language,
+                                plugins = plugins, seplugin = plugin, 
+                                intypes = intypes,  seintype = intype,
+                                text = text, myform = myform, filecode = filecode,
+                                nums = PluginNum, details = con_temp['detail'], 
+                                ftype = ftype, href = href,
+                                filenames = filenames, sefilename = sefilename)
 
 #路由--------添加接口页面路由
 @app.route('/addplug', methods = ['GET', 'POST'])
@@ -437,9 +437,9 @@ def resullt(pluginname, findfilecode):
                     except:
                         text = '内容不可读！'
         return render_template('result.html',
-															filedownload = filedownload, sefilecode = sefilecode,
-															text12 = text, ftype = ftype, href = href,
-															filecodes = templist, findfilecode = findfilecode)
+                                filedownload = filedownload, sefilecode = sefilecode,
+                                text12 = text, ftype = ftype, href = href,
+                                filecodes = templist, findfilecode = findfilecode)
     else:
         findfilecode = request.form.get('id')
         sefilecode = request.form.get('filecode')
@@ -512,9 +512,9 @@ def resullt(pluginname, findfilecode):
                             except:
                                 text = '内容不可读！'
         return render_template('result.html',
-															filedownload = filedownload, sefilecode = sefilecode,
-															text12 = text, pluginname = pluginname, href = href, ftype = ftype,
-															filecodes = templist, findfilecode = findfilecode)
+                                filedownload = filedownload, sefilecode = sefilecode,
+                                text12 = text, pluginname = pluginname, href = href, ftype = ftype,
+                                filecodes = templist, findfilecode = findfilecode)
 
 
 
@@ -615,10 +615,10 @@ def manage():
                     other_data['image_tag'] = request.form.get('image-tag')
                     docker_object = my_docker('--no-plugin', main_config = main_condict, filecode='--no-filecode', images=False, containers=False )
                     docker_object.basic_image_build(other_data['basic_image'], 
-																							other_data['image_tag'],
-																							other_data['source_select'],
-																							other_data['install_content']
-																							)
+                                                    other_data['image_tag'],
+                                                    other_data['source_select'],
+                                                    other_data['install_content']
+                                                    )
                     flash(docker_object.run_log)
             elif manage_select == 'other_add':
                 if manageform.commit.data:
@@ -629,9 +629,9 @@ def manage():
                     with open(main_condict['sources_path'][0] + sources_name + '/sources.list', 'w+') as f:
                         f.write(sources_content)
         return render_template('manage.html',manageform = manageform, mous = mous,
-															sources = sources, sesource = sesource, manage_select = manage_select, 
-															images = images, containers = containers, sources_dict = sources_dict,
-															other_data = other_data)
+                                sources = sources, sesource = sesource, manage_select = manage_select, 
+                                images = images, containers = containers, sources_dict = sources_dict,
+                                other_data = other_data)
 
 
 #路由---------帮助页路由
@@ -672,5 +672,5 @@ def help():
 #程序入口
 if __name__ == "__main__":
     #运行
-    app.run(host='0.0.0.0', port=8081)
+    app.run(host='0.0.0.0', port=5000)
     # app.run()
