@@ -6,7 +6,7 @@ from src.myForm import myForm,addForm,fileDownload, manageForm
 from src.con import *
 from src.mydocker import my_docker, get_images_list
 from src.pluginManage import plugin_add, plugin_delete, plugin_update, update_in_github
-from src.imageManage import image_add, image_delete, image_list
+from src.imageManage import image_backup, image_delete, image_list
 from src.containerManage import containers_list, container_delete
 from src.sourcesManage import sources_delete, sources_list, sources_modification
 
@@ -584,6 +584,8 @@ def manage():
                 if manageform.delete.data:
                     image_delete(sename)
                     images.pop(sename)
+                elif manageform.backup.data:
+                    image_backup(sename)
                 elif manageform.container_add.data:
                     con_docker_object = my_docker(sename.split(':')[0], main_config = main_condict, filecode='--no-filecode', images=True, containers=False )
                     container_name = sename.split(':')[0] + '_' + ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 10))

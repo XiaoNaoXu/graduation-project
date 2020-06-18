@@ -1,12 +1,13 @@
 import os
 from src.mydocker import get_images_list, getAll_images_list, my_docker
 from src.con import localfile_delete, main_con
+from subprocess import check_call, check_output
 
 def pimageid_to_pimagename(images, parent_imageId):
     for image in images:
         if parent_imageId == image.id:
             if image.attrs['Parent'] == '' or image.attrs['RepoTags'] != []:
-                return image.attrs['RepoTags'][0]
+                return image.attrs['RepoTags']
             elif image.attrs['Parent'] != '':
                 return pimageid_to_pimagename(images, image.attrs['Parent'])
                 
@@ -39,8 +40,23 @@ def image_list():
         images_list[name]['Architecture'] = image.attrs['Os'] + '-' + image.attrs['Architecture']
     return images_list
 
-def image_add():
-    pass
+def image_backup(image_name):
+    main_condict = main_con()
+    images = get_images_list()
+    backup_url = 'docker login -u=' + main_condict['HubUser'][0] + ' -p=' + main_condict['HubPasswd'][0] + ' ' + main_condict['HubUrl'][0]
+    for key in images:
+        if key == image_name:
+            check_output(backup_url, shell = True)
+            changed_name = 'docker tag ' + images[key].id[7:19] + ' ' + main_condict['HubUrl'][0] + '/' \
+                + main_condict['HubRepository'][0] + '/' + key
+            check_output(changed_name, shell=True)
+            push_url = 'docker push ' + main_condict['HubUrl'][0] + '/' \
+                + main_condict['HubRepository'][0] + '/' + key
+            check_output(push_url, shell=True)
+            rmi_url = 'docker rmi ' + main_condict['HubUrl'][0] + '/' \
+                + main_condict['HubRepository'][0] + '/' + key
+            check_output(rmi_url, shell=True)
+
 
 def image_delete(image):
     main_condict = main_con()

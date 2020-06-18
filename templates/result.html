@@ -88,8 +88,8 @@
                                     <div style="display: flex; padding-bottom: 0.5rem;">
                                         <div>
                                             文件码：
-                                            <input style="width: 18rem;height: 1.2rem;" type='text' name='id' id='id' value={{findfilecode}}>
-                                            {{filedownload.find}}
+                                            <input style="width: 18rem;height: 1.5rem;outline: none; resize: none;" type='text' name='id' id='id' value={{findfilecode}}>
+                                            {{filedownload.find(class='bootom-sty')}}
                                         </div>
                                         <div style="color: rgb(220, 110, 20);">{{tap}}</div>
                                     </div>
@@ -104,8 +104,8 @@
                                                 {% endif %}
                                             {% endfor %}
                                         </select>
-                                        {{filedownload.downloadf}}
-                                        {{filedownload.alldownloadf}}
+                                        {{filedownload.downloadf(class='bootom-sty')}}
+                                        {{filedownload.alldownloadf(class='bootom-sty')}}
                                     </div>
                             </div>
                 </div>

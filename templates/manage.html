@@ -129,7 +129,8 @@
             {% endif %}
         </div>
         <section>
-            <div style="padding-left: 0.5rem;">
+            <!-- style="font-weight: 600;" -->
+            <div style="padding-left: 0.5rem;font-weight: 900;font-size: 20px;">
                 
                     <div id='test1' style="height: 3rem; background: #34373d; background-image:linear-gradient(141deg,#160c07 0%,#1fc8db 51%,#494745 75%)">
                         
@@ -150,20 +151,20 @@
                                 <td class="index-image-delete">删除</td>
                             </tr>
                             {% for image in images %}
-                                <tr class="object-image">
-                                    <td class="object-image-name">{{ image }}</td>
+                                <tr class="object-image" style="font-size: 20px;font-weight: 900 !important;">
+                                    <td class="object-image-name" >{{ image }}</td>
                                     <td class="object-image-id">{{ images[image]['Id'] }}</td>
-                                    <td class="object-image-name">{{ images[image]['parentName'] }}</td>
+                                    <td class="object-image-name">{{ images[image]['parentName'][0] }}</td>
                                     <td class="object-image-labels">{{ images[image]['Labels'] }}</td>
                                     <td class="object-image-imagetype">{{ images[image]['imagetype'] }}</td>
                                     <td class="object-image-architecture">{{ images[image]['Architecture'] }}</td>
                                     <td class="object-image-size">{{ images[image]['Size'] }}(Byte)</td>
                                     <td class="object-image-created">{{ images[image]['Created'] }}</td>
                                     <td class="object-image-delete">
-                                        {{ manageform.delete(onclick="c1();") }}
-                                        {{ manageform.backup(onclick="c1();") }}
+                                        {{ manageform.delete(onclick="c1();", class='bootom-sty') }}
+                                        {{ manageform.backup(onclick="c1();", class='bootom-sty') }}
                                         {% if images[image]['imagetype'] == '衍生镜像' %}
-                                            {{ manageform.container_add(onclick="c1();") }}                                            
+                                            {{ manageform.container_add(onclick="c1();", class='bootom-sty') }}                                            
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -190,7 +191,7 @@
                                     <td class="object-container-pid">{{ containers[container]['pid'] }}</td>
                                     <td class="object-container-created">{{ containers[container]['created'] }}</td>
                                     <td class="object-container-laststart">{{ containers[container]['laststart'] }}</td>
-                                    <td class="object-container-delete">{{ manageform.delete(onclick="c1();") }}</td>
+                                    <td class="object-container-delete">{{ manageform.delete(onclick="c1();", class='bootom-sty') }}</td>
                                 </tr>
                             {% endfor %}
                         </table>
@@ -202,25 +203,25 @@
                                         <div style="width: 100%; height: 25%; ">
                                             <div style="padding:1rem; width: 100%; height: 100%; display: flex; ">
                                                 <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
-                                                    软件源名称：<input readonly type="text" name="sources-name" value={{source_name}}>
+                                                    软件源名称：<input readonly style="font-size: 18px; font-weight: 600; color: #414141;" type="text" name="sources-name" value={{source_name}}>
                                                 </div>
                                                 <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
                                                     {% if sources_dict[source_name][1] == 1 %}
-                                                        {{ manageform.cancel(onclick="get_id(this)", id=source_name ) }}
-                                                        {{ manageform.commit(onclick="get_id(this)", id=source_name ) }}
+                                                        {{ manageform.cancel(onclick="get_id(this)", id=source_name, class='bootom-sty' ) }}
+                                                        {{ manageform.commit(onclick="get_id(this)", id=source_name , class='bootom-sty') }}
                                                     {% else %}
-                                                        {{ manageform.edit(onclick="get_id(this)", id=source_name ) }}
+                                                        {{ manageform.edit(onclick="get_id(this)", id=source_name, class='bootom-sty' ) }}
                                                     {% endif %}
-                                                    {{ manageform.delete(onclick="get_id(this)", id=source_name ) }}
+                                                    {{ manageform.delete(onclick="get_id(this)", id=source_name, class='bootom-sty' ) }}
                                                 </div>
                                             </div>
                                         </div>
                                         <div style="width: 100%; height: 75%;">
                                             <div style="padding:1rem; width: 100%; height: 100%;">
                                                 {% if sources_dict[source_name][1] == 1 %}
-                                                    <textarea style="width: 100%; height: 100%;" name="sources-content">{{sources_dict[source_name][0]}}</textarea>
+                                                    <textarea style="width: 100%; height: 100%; font-size: 18px; font-weight: 600; color: #404040;" name="sources-content">{{sources_dict[source_name][0]}}</textarea>
                                                 {% else %}
-                                                    <textarea readonly style="width: 100%; height: 100%;" name="sources-content">{{sources_dict[source_name][0]}}</textarea>
+                                                    <textarea readonly style="width: 100%; height: 100%; font-size: 18px; font-weight: 600; color: #414141;" name="sources-content">{{sources_dict[source_name][0]}}</textarea>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -234,8 +235,8 @@
                                 <div style="width: 100%; height: 25%; ">
                                     <div style="padding:1rem; width: 100%; height: 100%; display: flex; ">
                                         <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
-                                            <div>基础镜像：<input type="text" name="basic-image" placeholder="例如：ubunut:19.10" value={{other_data['basic_image']}}></div>
-                                            <div>新镜像名称：<input type="text" name="image-tag" placeholder="没有例如，英文加数字就行" value={{other_data['ImageTag']}}>:basic</div>
+                                            <div>基础镜像：<input type="text" style="font-size: 18px; font-weight: 600; color: #414141; height: 1.5rem;" name="basic-image" placeholder="例如：ubunut:19.10" value={{other_data['basic_image']}}></div>
+                                            <div>新镜像名称：<input type="text" name="image-tag" style="font-size: 18px; font-weight: 600;height: 1.5rem; color: #414141;" placeholder="没有例如，英文加数字就行" value={{other_data['ImageTag']}}>:basic</div>
                                         </div>
                                         <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
                                             <select class="source-select"  name="source-select" > 
@@ -247,13 +248,13 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
-                                            {{ manageform.commit }}
+                                            {{ manageform.commit(class='bootom-sty') }}
                                         </div>
                                     </div>
                                 </div>
                                 <div style="width: 100%; height: 75%;">
                                     <div style="padding:1rem; width: 100%; height: 100%;">
-                                        <textarea style="width: 100%; height: 100%;" name="install-content" id="install-content">{{other_data['install_content']}}</textarea>
+                                        <textarea style="width: 100%; height: 100%; font-size: 22px; font-weight: 900; color: #414141;" name="install-content" id="install-content">{{other_data['install_content']}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -263,7 +264,7 @@
                                         <div style="padding: 1rem;">
                                             <li style="color: rgb(173, 70, 29);">运行日志: </li>
                                             {% for meg in get_flashed_messages()[0] %}
-                                                <li>{{meg}}</li>
+                                                <li class="meg">{{meg}}</li>
                                             {% endfor %}
                                         </div>
                                     </div>
@@ -276,16 +277,16 @@
                                 <div style="width: 100%; height: 25%; ">
                                     <div style="padding:1rem; width: 100%; height: 100%; display: flex; ">
                                         <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
-                                            软件源名称：<input type="text" name="sources-name" placeholder="例如：ubunut-aliyun">
+                                            软件源名称：<input type="text" style="font-size: 18px; font-weight: 600; color: #414141;" name="sources-name" placeholder="例如：ubunut-aliyun">
                                         </div>
                                         <div style="padding:1rem; width: 50%; height: 100%; text-align:center; background-color: #494d53;">
-                                            {{ manageform.commit(onclick="c1();") }}
+                                            {{ manageform.commit(onclick="c1();", class='bootom-sty') }}
                                         </div>
                                     </div>
                                 </div>
                                 <div style="width: 100%; height: 75%;">
                                     <div style="padding:1rem; width: 100%; height: 100%;">
-                                        <textarea style="width: 100%; height: 100%;" name="sources-content" id="sources" cols="30" rows="10"></textarea>
+                                        <textarea style="width: 100%; height: 100%; font-size: 22px; font-weight: 900; color: #414141;" name="sources-content" id="sources" cols="30" rows="10"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -312,11 +313,11 @@
                                         <td class="object-detail">
                                             <textarea readonly name={{mou + '_detail' }}  class="text-detail" id="detail" >{{ ''.join(mous[mou]['detail']) }}</textarea>
                                         </td>
-                                        <td class="object-edit">{{ manageform.edit(onclick="c1();") }}</td>
+                                        <td class="object-edit">{{ manageform.edit(onclick="c1();", class='bootom-sty') }}</td>
                                         <td class="object-delete">
-                                            {{ manageform.delete(onclick="c1();") }}
+                                            {{ manageform.delete(onclick="c1();", class='bootom-sty') }}
                                             {% if mous[mou]['registertype'][0] == 'github' %}
-                                                {{ manageform.update(onclick="c1();") }}
+                                                {{ manageform.update(onclick="c1();", class='bootom-sty') }}
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -342,11 +343,11 @@
                                         <td>
                                             <textarea name={{mou + '_detail' }} class="text-detail-selected"  name="detail" id="detail">{{ ''.join(mous[mou]['detail']) }}</textarea>
                                         </td>
-                                        <td class="object-edit">{{ manageform.cancel(onclick="c1();") }} {{ manageform.commit(onclick="c1();") }}</td>
+                                        <td class="object-edit">{{ manageform.cancel(onclick="c1();", class='bootom-sty') }} {{ manageform.commit(onclick="c1();", class='bootom-sty') }}</td>
                                         <td class="object-delete">
-                                            {{ manageform.delete(onclick="c1();") }}
+                                            {{ manageform.delete(onclick="c1();", class='bootom-sty') }}
                                             {% if mous[mou]['registertype'][0] == 'github' %}
-                                                {{ manageform.update(onclick="c1();") }}
+                                                {{ manageform.update(onclick="c1();", class='bootom-sty') }}
                                             {% endif %}
                                         </td>
                                     </tr>

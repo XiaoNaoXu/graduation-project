@@ -4,9 +4,9 @@ html{
 body{
     margin: 0;
     font-family: "Muli", sans-serif;
-    font-size: 1rem;
-    font-weight: 400;
-    color: #8a8d93;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #dadada;
     text-align: left;
     line-height: 24px;
 }
@@ -44,6 +44,7 @@ section{
 
 nav#sidebar {
     width: 16rem;
+    font-weight: 800;
     background: #2d3035;
     color: #6a6c70;
     border-right: 1px solid #34373d;
@@ -77,8 +78,10 @@ nav#sidebar li {
 nav#sidebar li a {
     padding: 18px 20px;
     display: block;
-    font-weight: 400;
+    font-weight: 800;
+    font-size: 22px;
     padding-left: 60px;
+    color: #eff1f5;
 }
 .d-flex {
     display: -ms-flexbox!important;
@@ -108,12 +111,19 @@ li.active > a {
     color: #bfc1c4;
 }
 
+select{
+    height: 1.3rem;
+    font-weight: 700;
+    font-size: 18px;
+    color: #414141;
+}
 
 .page-header {
     padding-bottom: 0;
     background: #2d3035;
-    color: #8a8d93;
+    color: #dadada;
     margin-bottom: 30px;
+    font-weight: 700;
 }
 
 section .no-padding{
@@ -149,7 +159,7 @@ section .no-padding{
     padding: 20px;
     background: #2d3035;
     color: #8a8d93;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 .content{
     justify-content: space-between!important;
@@ -192,8 +202,9 @@ input[type='submit'], button{
 
 .se-second-meau{
     background-color: #34373d;
-    color: #bfc1c4;
-    font-size: 1rem;
+    font-weight: 700;
+    color: #dee1e4;
+    font-size: 1.2rem;
     border: 0;
     width: 8rem;
     height: 3.5rem;
@@ -203,8 +214,9 @@ input[type='submit'], button{
 
 .second-meau{
     background-color: #2d3035;
-    color: #8a8d93;
-    font-size: 1rem;
+    font-weight: 700;
+    color: #f5f6f8;
+    font-size: 1.15rem;
     border: 0;
     width: 8rem;
     height: 3.5rem;
@@ -216,8 +228,10 @@ input[type='submit'], button{
     border:0;
     border-radius:1px;
     background-color: #d9dbdf;
-    width:69.7rem;height: 500px;
+    width:69.7rem;height: 745px;
     padding: 3px;resize: none;
+    font-size: 18px;
+    font-weight: 550;
     outline: none; 
     resize: none;
 }
@@ -233,13 +247,21 @@ input[type='submit'], button{
     resize: none;
 }
 .textarea-dis{
-    color:  #8a8d93; 
+    color:  #d4d2d2; 
     background: #34373d; 
+    font-weight: 600;
+    font-size: 18px;
     width: 100%; 
     height: 15.8rem; 
     border:none;
     outline: none; 
     resize: none;
+}
+
+.bootom-sty{
+    font-size: 16px;
+    font-weight: 600;
+    color: #3c3c3d;
 }
 
 .tblock{
@@ -420,4 +442,13 @@ input[type='submit'], button{
     height: 3rem;
     width: 16rem;
     font-size: 15px;
+}
+td {
+    font-weight: 900 !important;
+    /* font-family: "Calibri (Body)"; */
+    letter-spacing:.015em;
+    /* font-size: 25px; */
+}
+.meg{
+    color: #f5f6f8;
 }

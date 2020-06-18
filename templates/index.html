@@ -159,7 +159,7 @@
                         <div class="row-right">
                             <div style="height: 100%; background: #34373d;width: 100%; border-radius:3px;">
                                 <div style="padding: 0.5rem;">
-                                    <li style="color:rgb(214, 122, 36); font-size: 15px; font-weight: 500;">接口描述:</li>
+                                    <li style="color:rgb(214, 122, 36); font-size: 20px; font-weight: 700;">接口描述:</li>
                                     <textarea readonly name="" id=""  class="textarea-dis">{% for detail in details %}{{detail}}{% endfor %}</textarea>
                                 </div>
                             </div>
@@ -168,12 +168,12 @@
         </section>
         <section>
             <div >
-                    <div style="padding-left: 0.9rem; width: 70.9rem;">
+                    <div style="padding-left: 0.7rem; width: 70.8rem;">
                             <div class="no-name">
                                     <div style="width: 62rem;">
                                             {{myform.sourcefile.label}}
                                             {{myform.sourcefile(multiple='multiple')}}
-                                            {{myform.add}}
+                                            {{myform.add(class='bootom-sty')}}
                                             文件列表：
                                             <select name="filename" style="width: 10rem;" onchange="javascript:this.form.submit();"> 
                                                     {%  for filename in filenames %}
@@ -184,10 +184,10 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
-                                            {{myform.delete}}
+                                            {{myform.delete(class='bootom-sty')}}
                                     </div>
                                     <div>
-                                            {{myform.publish}}
+                                            {{myform.publish(class='bootom-sty')}}
                                     </div>
                             </div>
                         </div>

@@ -37,8 +37,8 @@ table{
 
 .object{
     background-color:#34373d; 
-    color:#8a8d93;
-    font-weight: 650;
+    color:#e8ebf0;
+    font-weight: 900;
 }
 .object-name{
     width: 8rem;
@@ -66,9 +66,10 @@ table{
     background-color:#34373d;
     width: 30rem;
     height: 2.5rem;
-    font-size: 14px;
+    /* font-size: 15px; */
     font-weight: 650;
-    color:#8a8d93;
+    color:#dbdbdb;
+    padding-top: 0.5rem;
     border:0;
     border:none;
     outline: none; 
@@ -154,7 +155,7 @@ table .source-select{
 
 .object-image{
     background-color:#34373d; 
-    color:#8a8d93;
+    color:#e8ebf0;
     font-weight: 650;
 }
 .object-image-name{
@@ -191,7 +192,7 @@ table .source-select{
     font-weight: 650;
 }
 .index-container-name{
-    height: 1.5rem;
+    /* height: 1.5rem; */
     width: 10rem;
 }
 .index-container-id{
@@ -225,8 +226,8 @@ table .source-select{
 
 .object-container{
     background-color:#34373d; 
-    color:#8a8d93;
-    font-weight: 650;
+    color:#e8ebf0;
+    font-weight: 900;
 }
 .object-container-name{
     height: 3rem;
