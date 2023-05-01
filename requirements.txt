@@ -1,6 +1,6 @@
 WTForms==2.2.1
 Flask_WTF==0.14.2
 Werkzeug==0.16.0
-Flask==1.1.1
+Flask==2.3.2
 docker_py==1.10.6
 rarfile==3.1
